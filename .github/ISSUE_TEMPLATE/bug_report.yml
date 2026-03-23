@@ -1,0 +1,71 @@
+name: Inaccuracy Report
+description: Report incorrect or missing information in the NoJS Skill
+title: "[Inaccuracy]: "
+labels: ["inaccuracy", "triage"]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep the skill accurate! Please fill out the sections below.
+
+  - type: input
+    id: nojs-version
+    attributes:
+      label: No.JS Version
+      description: "Which version of No.JS are you comparing against?"
+      placeholder: "e.g., 1.10.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which area is affected?
+      options:
+        - SKILL.md (main skill file)
+        - references/directives.md
+        - references/filters.md
+        - references/api.md
+        - references/patterns.md
+        - references/validation.md
+        - Missing content
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What is incorrect or missing?
+      description: Describe what the skill says vs what the source code actually does.
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Source Code Reference
+      description: |
+        Which source file(s) prove the inaccuracy? e.g., `src/directives/events.js:80-95`
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Fix
+      description: What should the skill say instead?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have verified this against the No.JS source code
+          required: true
+        - label: I have searched existing issues and this hasn't been reported yet
+          required: true

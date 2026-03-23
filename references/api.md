@@ -602,7 +602,7 @@ NoJS.baseApiUrl = 'https://staging-api.example.com';
 Read-only string containing the current No.JS version.
 
 ```javascript
-console.log(NoJS.version); // "1.9.1"
+console.log(NoJS.version); // "1.10.0"
 ```
 
 ```html
