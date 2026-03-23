@@ -75,7 +75,7 @@ Data lives in Proxy-backed reactive contexts that inherit from parent elements (
 
 **Animations** - `animate="fadeIn"`, `transition="slide"`, `animate-stagger="50"`. Built-in: fadeIn, fadeOut, fadeInUp, slideInLeft, zoomIn, bounceIn, etc.
 
-**i18n** - `t="key"`, `t-name="expr"`, `i18n-ns="namespace"`, pluralization `"one item | {count} items"`. Namespace mode: `loadPath: '/locales/{locale}/{ns}.json'`. Formatting filters: `currency`, `date`, `datetime`, `relative`, `number`, `percent`. Context: `$i18n.locale`.
+**i18n** - `t="key"`, `t-name="expr"`, `t-html` (render translation as sanitized HTML), `i18n-ns="namespace"`, pluralization `"one item | {count} items"`. Namespace mode: `loadPath: '/locales/{locale}/{ns}.json'`. Formatting filters: `currency`, `date`, `datetime`, `relative`, `number`, `percent`. Context: `$i18n.locale`.
 
 **DnD** - `drag`, `drop="handler"`, `drag-list="items"`, `drag-multiple`.
 
@@ -93,7 +93,7 @@ Expressions support JavaScript-like syntax against the reactive context:
 - Pipes (filters): `name | uppercase`, `price | currency:'USD'`
 - Assignments: `count++`, `name = 'John'`
 - Function calls: `items.push(newItem)`
-- Forbidden: `__proto__`, `constructor`, `prototype`
+- The evaluator uses an allow-list approach: `_SAFE_GLOBALS` for JS built-ins and `_BROWSER_GLOBALS` for curated browser APIs. `fetch`, `XMLHttpRequest`, `localStorage`, `sessionStorage`, `WebSocket`, and `indexedDB` are NOT on the allow-list. Spread operations filter `_FORBIDDEN_PROPS` (`__proto__`, `constructor`, `prototype`)
 
 ### 4. Apply filters via pipe syntax
 

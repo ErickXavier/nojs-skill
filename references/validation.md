@@ -191,7 +191,7 @@ The `mode="hash"` and `mode="history"` router attributes are deprecated. Use the
 
 ### `bind-html` sanitization warning
 
-Any use of `bind-html` triggers a security warning because it renders raw HTML content. While No.JS includes DOMPurify-compatible sanitization by default, you should still ensure the content source is trusted.
+Any use of `bind-html` triggers a security warning because it renders raw HTML content. While No.JS includes a built-in DOMParser-based structural sanitizer by default, you should still ensure the content source is trusted.
 
 ```html
 <!-- WARNING: renders raw HTML, ensure content is sanitized -->
@@ -206,15 +206,11 @@ Any use of `bind-html` triggers a security warning because it renders raw HTML c
 <span bind="user.name"></span>
 ```
 
-### Forbidden prototype access
+### Expression evaluator security
 
-No.JS uses a sandboxed expression parser that blocks access to dangerous properties:
+No.JS uses a sandboxed expression parser with an allow-list approach. `_SAFE_GLOBALS` exposes JS built-ins (Math, Date, Object, Array, etc.) and `_BROWSER_GLOBALS` exposes curated browser APIs (document, console, navigator, etc.). `fetch`, `XMLHttpRequest`, `localStorage`, `sessionStorage`, `WebSocket`, and `indexedDB` are NOT on the allow-list. Spread operations filter `_FORBIDDEN_PROPS` (`__proto__`, `constructor`, `prototype`) to prevent prototype pollution.
 
-- `__proto__`
-- `constructor`
-- `prototype`
-
-These are blocked at the parser level. There is no `eval()` or `Function()` constructor usage, making No.JS fully CSP-compliant without `unsafe-eval`.
+There is no `eval()` or `Function()` constructor usage, making No.JS fully CSP-compliant without `unsafe-eval`.
 
 ### CSRF protection
 

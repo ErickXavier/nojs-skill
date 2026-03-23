@@ -1223,7 +1223,7 @@ Pair a request interceptor (stamps tokens) with a response interceptor (revokes 
       opts.headers = opts.headers || {};
       opts.headers['Authorization'] = 'Bearer ' + token;
     }
-    return [url, opts];
+    return opts;
   });
 
   // Revoke session on 401/403
@@ -1279,7 +1279,7 @@ Login + JWT interceptors + dashboard + validation -- all integrated:
         opts.headers = opts.headers || {};
         opts.headers['Authorization'] = 'Bearer ' + token;
       }
-      return [url, opts];
+      return opts;
     });
 
     NoJS.interceptor('response', (response) => {
