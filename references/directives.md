@@ -187,6 +187,8 @@ Custom request headers.
 
 Provided as a JSON string. Merged with global headers from `NoJS.config()`.
 
+> **Note:** Inline sensitive headers (`Authorization`, `Cookie`, `X-CSRF-Token`, `X-API-Key`) trigger an unconditional console warning. Prefer `NoJS.config({ headers })` or interceptors for sensitive headers.
+
 ### `params`
 
 Query parameters appended to the URL.
@@ -387,7 +389,7 @@ When you modify a store from outside No.JS expressions (e.g., in a `<script>` bl
 ```html
 <script>
   // Inside an interceptor or external callback
-  NoJS.interceptor('response', (url, options, response) => {
+  NoJS.interceptor('response', (response, url) => {
     if (response.status === 401) {
       NoJS.store.auth.user = null;
       NoJS.store.auth.token = null;
@@ -1668,6 +1670,19 @@ Pass parameters to translation strings.
 <!-- Pluralization: "{count} item | {count} items" -->
 <span t="items" t-count="cart.items.length"></span>
 ```
+
+### `t-html`
+
+Render the translation value as sanitized HTML instead of plain text. Companion to `t`.
+
+**Syntax:** `<element t="key" t-html>`
+
+```html
+<!-- Translation: "Read our <a href='/terms'>terms</a>" -->
+<div t="legal.notice" t-html></div>
+```
+
+The output is sanitized via `_sanitizeHtml()` to prevent XSS.
 
 ### `i18n-ns`
 

@@ -397,7 +397,7 @@ Register request or response interceptors for all HTTP directives (`get`, `post`
 
 ### Request interceptor
 
-Receives `(url, options)` and must return `[url, options]` (possibly modified).
+Receives `(url, options)` and must return `options` (possibly modified). The URL is read-only and cannot be reassigned.
 
 ```javascript
 NoJS.interceptor('request', (url, opts) => {
@@ -407,24 +407,16 @@ NoJS.interceptor('request', (url, opts) => {
     opts.headers = opts.headers || {};
     opts.headers['Authorization'] = 'Bearer ' + token;
   }
-  return [url, opts];
-});
-
-NoJS.interceptor('request', (url, opts) => {
-  // Rewrite API URLs for staging
-  if (url.startsWith('/api/')) {
-    url = 'https://staging.example.com' + url;
-  }
-  return [url, opts];
+  return opts;
 });
 ```
 
 ### Response interceptor
 
-Receives the `Response` object and must return a `Response` (possibly modified or replaced).
+Receives `(response, url)` and must return a `Response` (possibly modified or replaced).
 
 ```javascript
-NoJS.interceptor('response', (response) => {
+NoJS.interceptor('response', (response, url) => {
   if (response.status === 401) {
     NoJS.store.auth.token = null;
     NoJS.router.push('/login');
@@ -569,8 +561,8 @@ NoJS.locale = 'es';
 </select>
 
 <!-- Or with buttons -->
-<button on:click="NoJS.locale = 'en'">EN</button>
-<button on:click="NoJS.locale = 'es'">ES</button>
+<button on:click="window.NoJS.locale = 'en'">EN</button>
+<button on:click="window.NoJS.locale = 'es'">ES</button>
 ```
 
 ---
@@ -606,7 +598,7 @@ console.log(NoJS.version); // "1.10.0"
 ```
 
 ```html
-<footer bind="'Powered by No.JS v' + NoJS.version"></footer>
+<footer bind="'Powered by No.JS v' + window.NoJS.version"></footer>
 ```
 
 ---
@@ -668,9 +660,14 @@ These variables are available in No.JS expressions depending on the context:
 ### XSS Protection
 
 - `bind` uses `textContent` -- safe by default (no HTML parsing)
-- `bind-html` sanitizes HTML with a DOMPurify-compatible sanitizer before insertion
+- `bind-html` sanitizes HTML with a built-in DOMParser-based structural sanitizer before insertion
 - The expression parser is a custom sandboxed recursive-descent parser -- **no `eval()` or `Function()` is ever used**
-- Properties `__proto__`, `constructor`, and `prototype` are blocked in all expressions
+- The evaluator uses an allow-list approach: `_SAFE_GLOBALS` exposes JS built-ins (Math, Date, Object, Array, etc.) and `_BROWSER_GLOBALS` exposes curated browser APIs (document, console, navigator, etc.). `fetch`, `XMLHttpRequest`, `localStorage`, `sessionStorage`, `WebSocket`, and `indexedDB` are NOT on the allow-list
+- Spread operations filter `_FORBIDDEN_PROPS` (`__proto__`, `constructor`, `prototype`) to prevent prototype pollution
+
+### Sensitive Header Warning
+
+Inline sensitive headers (`Authorization`, `Cookie`, `X-CSRF-Token`, `X-API-Key`) in fetch directive attributes trigger an unconditional console warning. Use `NoJS.config({ headers })` or `NoJS.interceptor('request', ...)` to set sensitive headers without warnings.
 
 ### Content Security Policy (CSP)
 
@@ -875,7 +872,7 @@ Combining multiple API methods in a realistic application setup:
       opts.headers = opts.headers || {};
       opts.headers['Authorization'] = 'Bearer ' + token;
     }
-    return [url, opts];
+    return opts;
   });
 
   // 401 handler
