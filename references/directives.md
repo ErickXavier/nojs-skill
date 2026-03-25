@@ -4,6 +4,8 @@ Complete reference for every No.JS directive, grouped by category. Directives ex
 
 Most directive values accept JavaScript expressions evaluated against the current reactive context. Contexts inherit from parent elements like lexical scoping.
 
+> **Note:** The core directive registry is frozen after built-in directive registration. Custom directives registered via `NoJS.directive()` can only add **new** names -- they cannot override or replace built-in directives.
+
 ## Table of Contents
 
 - [Data Fetching](#data-fetching) -- base, get, post, put, patch, delete, as, body, headers, params, cached, into, debounce, refresh
