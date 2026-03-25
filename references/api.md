@@ -26,7 +26,9 @@ NoJS.config({
     base: '/',
     scrollBehavior: 'top',
     templates: 'pages',
-    ext: '.tpl'
+    ext: '.tpl',
+    focusBehavior: 'none',
+    suppressHashWarning: false
   },
   i18n: {
     defaultLocale: 'en',
@@ -72,6 +74,8 @@ NoJS.config({
 | `scrollBehavior` | string | `"top"` | Scroll on navigate: `"top"`, `"smooth"`, or `"preserve"` |
 | `templates` | string | `"pages"` | Directory for file-based route templates |
 | `ext` | string | `".tpl"` | File extension for auto-resolved route templates |
+| `focusBehavior` | string | `"none"` | Accessibility focus management after navigation. `"auto"` moves focus to `[autofocus]` → `[tabindex="-1"]` → `h1` → outlet |
+| `suppressHashWarning` | boolean | `false` | Silence the console warning emitted when `useHash: true` is set |
 
 #### i18n options
 
