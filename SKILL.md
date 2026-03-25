@@ -160,7 +160,23 @@ See [references/plugins.md](references/plugins.md) for the complete plugin syste
 
 Check for: directive typos (`bnd`→`bind`, `on-click`→`on:click`), missing `as` on `get`, `each` without `in`, `foreach` without `from`, `model` on non-form elements, unsanitized `bind-html`. See [references/validation.md](references/validation.md) for the full checklist.
 
-### 9. Consult reference files for deep details
+### 9. Use the NoJS CLI for development tooling
+
+The NoJS CLI (`@erickxavier/nojs-cli`) provides project scaffolding, a dev server, HTML optimization, template validation, and plugin management — all from the command line.
+
+**Scaffold** — `nojs init my-app` runs an interactive wizard generating `index.html`, routes, i18n locales, styles, and `nojs.config.json`. Non-interactive: `nojs init my-app --routing --i18n --locales en,pt --api https://api.example.com -y`.
+
+**Dev server** — `nojs dev` starts a local HTTP server with SSE live reload, SPA fallback for client-side routing, and path traversal protection. Options: `--port`, `--open`, `--quiet`, `--no-reload`.
+
+**Prebuild** — `nojs prebuild` runs 6 HTML optimization plugins: `inject-resource-hints` (preload/preconnect for fetch URLs), `inject-head-attrs` (title, description, canonical, JSON-LD), `inject-speculation-rules` (Speculation Rules API from routes), `inject-og-twitter` (Open Graph + Twitter Card meta), `generate-sitemap` (sitemap.xml from routes), `optimize-images` (lazy loading, LCP preload, fetchpriority). Configurable via `nojs-prebuild.config.js`.
+
+**Validate** — `nojs validate *.html` checks 10 rules: missing `as` on fetch, `each` without `in`, `foreach` without `from`, `model` on non-form elements, `bind-html` warning, routes without `route-view`, empty event handlers, loops without `key`, duplicate store names, `validate` outside `<form>`. Use `--format json` for CI.
+
+**Plugins** — `nojs plugin search|install|update|remove|list` manages plugins from CDN (official, with SRI integrity) or npm (community). Config stored in `nojs.config.json`.
+
+See [references/cli.md](references/cli.md) for the complete CLI reference with all options, config schemas, and examples.
+
+### 10. Consult reference files for deep details
 
 - [references/directives.md](references/directives.md) - Complete directive reference with all attributes and examples
 - [references/filters.md](references/filters.md) - All 32 built-in filters with syntax
@@ -168,6 +184,7 @@ Check for: directive typos (`bnd`→`bind`, `on-click`→`on:click`), missing `a
 - [references/plugins.md](references/plugins.md) - Plugin system: lifecycle, globals, interceptors, sentinels, security
 - [references/patterns.md](references/patterns.md) - Common patterns, scaffolds, and best practices
 - [references/validation.md](references/validation.md) - Template validation rules and common mistakes
+- [references/cli.md](references/cli.md) - NoJS CLI: init, dev, prebuild, validate, plugin commands
 
 ## Ecosystem
 
@@ -175,5 +192,6 @@ Check for: directive typos (`bnd`→`bind`, `on-click`→`on:click`), missing `a
 - **CDN**: https://cdn.no-js.dev/
 - **npm**: `npm install @erickxavier/no-js`
 - **GitHub**: https://github.com/ErickXavier/no-js
+- **CLI**: `npm install -g @erickxavier/nojs-cli` (scaffold, dev server, prebuild, validate, plugins)
 - **VS Code Extension**: NoJS LSP (completions, diagnostics, hover docs for 39+ directives)
 - **Full docs**: https://no-js.dev/llms-full.txt
