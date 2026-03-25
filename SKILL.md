@@ -7,7 +7,7 @@ description: Expert-level knowledge of the No.JS HTML-first reactive framework f
 
 # NoJS-Skill
 
-No.JS is an HTML-first reactive framework (~24KB gzipped, zero dependencies) that replaces JavaScript with declarative HTML attributes. CSP-compliant via a custom expression parser (no eval). Include one `<script>` tag and start writing directives.
+No.JS is an HTML-first reactive framework with zero dependencies that replaces JavaScript with declarative HTML attributes. CSP-compliant via a custom expression parser (no eval). Include one `<script>` tag and start writing directives.
 
 ```html
 <script src="https://cdn.no-js.dev/"></script>
@@ -103,21 +103,45 @@ Expressions support JavaScript-like syntax against the reactive context:
 
 ```javascript
 NoJS.config({ baseApiUrl, headers, timeout, retries, router, i18n, stores })
-NoJS.init(root?)           // Auto-called by CDN; manual for ESM/CJS
+NoJS.init(root?)           // Auto-called by CDN; manual for ESM/CJS. Returns a Promise
+NoJS.use(plugin, options?) // Register a plugin ({ name, install, init?, dispose? })
+NoJS.global(name, value)   // Register reactive global ($name in expressions)
+NoJS.dispose()             // Full teardown (plugins, stores, interceptors, router)
 NoJS.directive(name, { priority, init(el, attrName, value) })
 NoJS.filter(name, fn)      // Custom filter
 NoJS.validator(name, fn)   // Custom validator
 NoJS.i18n({ loadPath, defaultLocale, fallbackLocale, persist })
 NoJS.on(event, callback)   // Global event bus
-NoJS.interceptor('request' | 'response', fn)
+NoJS.interceptor('request' | 'response', fn)  // Supports async, plugin tracking
 NoJS.store                 // Access global stores
 NoJS.notify()              // Trigger UI update after external mutation
 NoJS.router                // push(), replace(), back(), forward()
 NoJS.locale = 'pt'         // Get/set locale
-NoJS.version               // "1.10.0"
+NoJS.version               // "1.10.1"
+NoJS.CANCEL                // Symbol sentinel: cancel request in interceptor
+NoJS.RESPOND               // Symbol sentinel: short-circuit with mock response
+NoJS.REPLACE               // Symbol sentinel: replace response data
 ```
 
-### 6. Follow these rules when generating No.JS code
+### 6. Use the plugin system for extensibility
+
+No.JS supports a plugin system for reusable extensions. Plugins can register interceptors, inject reactive globals, add custom directives, and hook into the app lifecycle.
+
+**Plugin registration** - `NoJS.use(plugin, options?)` accepts an object with `{ name, install, init?, dispose? }` or a named function. Plugins are installed synchronously; their `init` hook runs after `NoJS.init()`.
+
+**Reactive globals** - `NoJS.global('name', value)` injects a variable accessible as `$name` in all expressions. Objects are auto-wrapped in reactive contexts. Reserved names (`store`, `route`, `router`, `i18n`, `refs`, `form`, etc.) and prototype pollution vectors (`__proto__`, `constructor`, `prototype`) are blocked.
+
+**Interceptor sentinels** - Request interceptors can return `{ [NoJS.CANCEL]: true }` to abort, `{ [NoJS.RESPOND]: data }` to short-circuit. Response interceptors can return `{ [NoJS.REPLACE]: data }` to replace parsed data.
+
+**Trusted interceptors** - Plugins receive redacted headers by default. Install with `{ trusted: true }` for unredacted access to sensitive headers.
+
+**Disposal** - `NoJS.dispose()` tears down plugins in reverse order (3s timeout each), then clears globals and interceptors.
+
+**Directive freezing** - Core directives are frozen after framework load. Plugins can add new directives but cannot override built-ins.
+
+See [references/plugins.md](references/plugins.md) for the complete plugin system reference with lifecycle details, security rules, and examples.
+
+### 7. Follow these rules when generating No.JS code
 
 1. **Always set `as` on fetch directives** - `get="/users" as="users"` not just `get="/users"`
 2. **Use `each` for simple lists, `foreach` for complex** - foreach adds filter/sort/limit/key
@@ -129,16 +153,19 @@ NoJS.version               // "1.10.0"
 8. **Use filters for display** - `bind="price | currency"` not inline formatting
 9. **Events use colon syntax** - `on:click` not `onclick` or `on-click`
 10. **Validate forms declaratively** - `<form validate>` + `validate="required,email"` on inputs
+11. **Use plugins for reusable extensions** - `NoJS.use({ name, install })` for auth, analytics, etc.
+12. **Namespace plugin globals** - `app.global('myPlugin', {...})` not `app.global('data', {...})`
 
-### 7. Validate templates for common mistakes
+### 8. Validate templates for common mistakes
 
 Check for: directive typos (`bnd`→`bind`, `on-click`→`on:click`), missing `as` on `get`, `each` without `in`, `foreach` without `from`, `model` on non-form elements, unsanitized `bind-html`. See [references/validation.md](references/validation.md) for the full checklist.
 
-### 8. Consult reference files for deep details
+### 9. Consult reference files for deep details
 
 - [references/directives.md](references/directives.md) - Complete directive reference with all attributes and examples
 - [references/filters.md](references/filters.md) - All 32 built-in filters with syntax
 - [references/api.md](references/api.md) - Full JavaScript API reference
+- [references/plugins.md](references/plugins.md) - Plugin system: lifecycle, globals, interceptors, sentinels, security
 - [references/patterns.md](references/patterns.md) - Common patterns, scaffolds, and best practices
 - [references/validation.md](references/validation.md) - Template validation rules and common mistakes
 

@@ -48,7 +48,7 @@ The skill activates when it detects:
 
 | Project | Description |
 | --- | --- |
-| [No.JS](https://github.com/ErickXavier/no-js) | Core framework (~24KB gzipped, zero dependencies) |
+| [No.JS](https://github.com/ErickXavier/no-js) | Core framework (zero dependencies) |
 | [NoJS LSP](https://github.com/ErickXavier/nojs-lsp) | VS Code extension — completions, diagnostics, hover docs |
 | [NoJS MCP](https://github.com/ErickXavier/nojs-mcp) | MCP server for AI assistants |
 | **NoJS Skill** | This project — AI skill for Claude Code |
