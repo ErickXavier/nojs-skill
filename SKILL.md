@@ -104,7 +104,7 @@ Expressions support JavaScript-like syntax against the reactive context:
 ### 5. Use the public API when needed
 
 ```javascript
-NoJS.config({ baseApiUrl, headers, timeout, retries, router, i18n, stores, exprCacheSize, dangerouslyDisableSanitize })
+NoJS.config({ baseApiUrl, headers, timeout, retries, router, i18n, stores, exprCacheSize, dangerouslyDisableSanitize, maxEventListeners, devtools })
 NoJS.init(root?)           // Auto-called by CDN; manual for ESM/CJS. Returns a Promise
 NoJS.use(plugin, options?) // Register a plugin ({ name, install, init?, dispose? })
 NoJS.global(name, value)   // Register reactive global ($name in expressions)
