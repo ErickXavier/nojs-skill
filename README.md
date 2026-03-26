@@ -11,7 +11,9 @@ When installed, this skill automatically activates whenever you work with No.JS 
 - **Validate templates** for common mistakes (missing `as`, wrong event syntax, unsanitized `bind-html`)
 - **Explain any directive** with working examples
 - **Apply 32 built-in filters** correctly via pipe syntax
-- **Use the full public API** (config, router, i18n, stores, interceptors)
+- **Use head management directives** (`title`, `meta`, `link`, `script`, `base`) for declarative `<head>` control
+- **Leverage the plugin system** to extend the framework with custom directives and lifecycle hooks
+- **Use the full public API** (config, router, i18n, stores, interceptors, plugins)
 
 ## Installation
 
@@ -48,14 +50,15 @@ The skill activates when it detects:
 
 | Project | Description |
 | --- | --- |
-| [No.JS](https://github.com/ErickXavier/no-js) | Core framework (~24KB gzipped, zero dependencies) |
+| [No.JS](https://github.com/ErickXavier/no-js) | Core framework (zero dependencies) |
 | [NoJS LSP](https://github.com/ErickXavier/nojs-lsp) | VS Code extension — completions, diagnostics, hover docs |
 | [NoJS MCP](https://github.com/ErickXavier/nojs-mcp) | MCP server for AI assistants |
+| [NoJS CLI](https://github.com/ErickXavier/nojs-cli) | Command-line tool for scaffolding and managing No.JS projects |
 | **NoJS Skill** | This project — AI skill for Claude Code |
 
 ## Version
 
-This skill documents **No.JS v1.10.0**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
+This skill documents **No.JS v1.11.0**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
 
 ## License
 

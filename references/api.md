@@ -21,6 +21,10 @@ NoJS.config({
   cache: { strategy: 'none', ttl: 300000 },
   templates: { cache: true },
   sanitize: true,
+  dangerouslyDisableSanitize: false,
+  exprCacheSize: 500,
+  maxEventListeners: 100,
+  devtools: false,
   router: {
     useHash: false,
     base: '/',
@@ -61,6 +65,10 @@ NoJS.config({
 | `cache` | object | `{ strategy: "none", ttl: 300000 }` | HTTP cache settings. `strategy`: `"none"`, `"memory"`, etc. |
 | `templates` | object | `{ cache: true }` | Template loading settings |
 | `sanitize` | boolean | `true` | Sanitize HTML in `bind-html` |
+| `dangerouslyDisableSanitize` | boolean | `false` | Explicit opt-out of HTML sanitization (use with caution) |
+| `exprCacheSize` | number | `500` | Maximum expression cache entries; uses LRU eviction |
+| `maxEventListeners` | number | `100` | Maximum event listeners per element |
+| `devtools` | boolean | `false` | Enable browser devtools panel |
 | `router` | object | See below | Router configuration |
 | `i18n` | object | See below | Internationalization settings |
 | `stores` | object | -- | Define global stores at config time (keys become store names) |
@@ -141,7 +149,7 @@ NoJS.init();
 NoJS.init(document.getElementById('app'));
 ```
 
-**Lifecycle**: `init()` is idempotent -- calling it more than once is a no-op. The CDN entry point calls `NoJS.init()` automatically on `DOMContentLoaded`. For ESM/CJS consumers, call it manually after configuration.
+**Lifecycle**: `init()` is idempotent -- calling it more than once is a no-op. The CDN entry point calls `NoJS.init()` automatically on `DOMContentLoaded`. For ESM/CJS consumers, call it manually after configuration. Returns a `Promise` that resolves when initialization is complete (including plugin `init()` hooks).
 
 **Initialization sequence**:
 1. Load external locale files (blocking, if `i18n.loadPath` is set)
@@ -152,6 +160,8 @@ NoJS.init(document.getElementById('app'));
 6. Initialize router (navigate to current URL)
 7. Background preload remaining route templates (Phase 2)
 8. Initialize DevTools integration
+9. Call `init()` on all installed plugins (in installation order)
+10. Emit `plugins:ready` event
 
 ---
 
@@ -390,18 +400,201 @@ NoJS.on('theme:change', (theme) => {
 
 ---
 
+## NoJS.use(plugin, options?)
+
+Register a plugin with the framework. Plugins extend NoJS with new directives, filters, interceptors, globals, and lifecycle hooks.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `plugin` | object \| function | Plugin object or named install function |
+| `options` | object | Optional configuration passed to the plugin's `install` function |
+
+### Plugin interface
+
+```javascript
+{
+  name: 'my-plugin',          // Required. Unique plugin name
+  version: '1.0.0',           // Optional. Semver string
+  capabilities: ['auth'],     // Optional. Logged in debug mode
+  install(NoJS, options) {    // Required. Called immediately on use()
+    // Register directives, filters, interceptors, globals, etc.
+  },
+  init(NoJS) {                // Optional. Called after NoJS.init() completes
+    // DOM is ready, router/stores are available
+  },
+  dispose(NoJS) {             // Optional. Called during NoJS.dispose()
+    // Cleanup timers, event listeners, connections, etc.
+  }
+}
+```
+
+### Function shorthand
+
+Named functions are accepted as a shorthand (the function name becomes the plugin name):
+
+```javascript
+NoJS.use(function analytics(NoJS, options) {
+  NoJS.interceptor('response', (res, url) => {
+    track(url, res.status);
+    return res;
+  });
+});
+```
+
+### Options
+
+The optional `options` object is passed directly to the plugin's `install` function. One special key:
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `trusted` | boolean | Grant the plugin access to unredacted HTTP headers and URLs in interceptors. Default: `false` |
+
+### Examples
+
+```javascript
+// Object plugin
+const authPlugin = {
+  name: 'auth',
+  version: '1.0.0',
+  capabilities: ['interceptor', 'store'],
+  install(NoJS, options) {
+    NoJS.interceptor('request', (url, opts) => {
+      const token = NoJS.store.auth?.token;
+      if (token) {
+        opts.headers = opts.headers || {};
+        opts.headers['Authorization'] = 'Bearer ' + token;
+      }
+      return opts;
+    });
+  },
+  init(NoJS) {
+    console.log('Auth plugin ready');
+  },
+  dispose(NoJS) {
+    console.log('Auth plugin disposed');
+  }
+};
+
+NoJS.use(authPlugin);
+NoJS.use(authPlugin, { trusted: true }); // Grant header access
+
+// Duplicate installs are no-ops (same object)
+NoJS.use(authPlugin); // Silently ignored
+```
+
+**Lifecycle**: `install()` runs synchronously during `use()`. If `NoJS.init()` has already completed and the plugin defines `init()`, it is called immediately (awaited). `dispose()` is called in reverse installation order during `NoJS.dispose()`.
+
+**Constraints**: Plugin names must be unique and non-empty. Installing a different plugin object with the same name logs a warning and is rejected. Plugins cannot be installed during `dispose()`.
+
+---
+
+## NoJS.global(name, value)
+
+Register a reactive global variable accessible as `$name` in all expressions.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | string | Variable name (without the `$` prefix). Must start with a letter and contain only `[a-zA-Z0-9_]` |
+| `value` | any | The value to expose. Objects are sanitized (prototype keys stripped). Functions, `eval`, and `Function` references are rejected |
+
+```javascript
+// Register a global
+NoJS.global('apiVersion', '2.1');
+NoJS.global('theme', { mode: 'dark', accent: '#0af' });
+```
+
+```html
+<!-- Access in expressions as $apiVersion, $theme -->
+<span bind="$apiVersion"></span>
+<div class-dark="$theme.mode === 'dark'">...</div>
+```
+
+**Reserved names**: The following names are reserved and cannot be used: `store`, `route`, `router`, `i18n`, `refs`, `form`, `parent`, `watch`, `set`, `notify`, `raw`, `isProxy`, `listeners`, `app`, `config`, `env`, `debug`, `version`, `plugins`, `globals`, `el`, `event`, `self`, `this`, `super`, `window`, `document`, `toString`, `valueOf`, `hasOwnProperty`.
+
+**Ownership**: When called inside a plugin's `install()`, the global is tracked as owned by that plugin. Overwriting a global owned by a different plugin logs a warning.
+
+---
+
+## NoJS.dispose()
+
+Tear down the entire NoJS instance. Disposes plugins in reverse installation order, clears interceptors, globals, stores, event bus, and the router.
+
+```javascript
+await NoJS.dispose();
+// All plugins disposed, all state cleared
+```
+
+**Behavior**:
+1. Calls `dispose()` on each installed plugin in reverse order (with a 3-second timeout per plugin)
+2. Clears all plugins, globals, interceptors, stores, and event listeners
+3. Destroys the router instance
+4. Resets initialization state so `NoJS.init()` can be called again
+
+Returns a `Promise` that resolves when teardown is complete.
+
+---
+
+## NoJS.CANCEL
+
+Read-only `Symbol` sentinel. Return an object with this symbol key set to `true` from a request interceptor to abort the request.
+
+```javascript
+NoJS.interceptor('request', (url, opts) => {
+  if (isBlacklisted(url)) {
+    return { [NoJS.CANCEL]: true };
+  }
+  return opts;
+});
+```
+
+The cancelled request throws a `DOMException` with name `"AbortError"`, which is handled by the `error` template if present.
+
+---
+
+## NoJS.RESPOND
+
+Read-only `Symbol` sentinel. Return an object with this symbol key from a request interceptor to short-circuit the request and provide a mock response without hitting the network.
+
+```javascript
+NoJS.interceptor('request', (url, opts) => {
+  if (url.includes('/cached-data')) {
+    return { [NoJS.RESPOND]: { users: cachedUsers } };
+  }
+  return opts;
+});
+```
+
+The value of `[NoJS.RESPOND]` becomes the parsed response data.
+
+---
+
+## NoJS.REPLACE
+
+Read-only `Symbol` sentinel. Return an object with this symbol key from a response interceptor to replace the response data entirely.
+
+```javascript
+NoJS.interceptor('response', (response, url) => {
+  if (url.includes('/transform')) {
+    return { [NoJS.REPLACE]: transformedData };
+  }
+  return response;
+});
+```
+
+---
+
 ## NoJS.interceptor(type, fn)
 
-Register request or response interceptors for all HTTP directives (`get`, `post`, `put`, `patch`, `delete`).
+Register request or response interceptors for all HTTP directives (`get`, `post`, `put`, `patch`, `delete`). Interceptors can be synchronous or asynchronous (return a Promise).
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `type` | `"request"` \| `"response"` | The interception point |
-| `fn` | function | Interceptor function |
+| `fn` | function | Interceptor function (sync or async) |
 
 ### Request interceptor
 
-Receives `(url, options)` and must return `options` (possibly modified). The URL is read-only and cannot be reassigned.
+Receives `(url, options)` and must return `options` (possibly modified), or a sentinel object (`CANCEL`, `RESPOND`). The URL is read-only and cannot be reassigned.
 
 ```javascript
 NoJS.interceptor('request', (url, opts) => {
@@ -413,11 +606,18 @@ NoJS.interceptor('request', (url, opts) => {
   }
   return opts;
 });
+
+// Async interceptor
+NoJS.interceptor('request', async (url, opts) => {
+  const token = await refreshTokenIfNeeded();
+  opts.headers['Authorization'] = 'Bearer ' + token;
+  return opts;
+});
 ```
 
 ### Response interceptor
 
-Receives `(response, url)` and must return a `Response` (possibly modified or replaced).
+Receives `(response, url)` and must return a response (possibly modified), or a sentinel object (`REPLACE`).
 
 ```javascript
 NoJS.interceptor('response', (response, url) => {
@@ -428,6 +628,14 @@ NoJS.interceptor('response', (response, url) => {
   return response;
 });
 ```
+
+### Plugin tracking and header redaction
+
+When interceptors are registered inside a plugin's `install()`, they are automatically tagged with the plugin name. By default, response interceptors receive a **redacted** response object with sensitive headers (`Authorization`, `Cookie`, `Set-Cookie`, etc.) and URL query parameters stripped. Plugins installed with `{ trusted: true }` receive the original unredacted response.
+
+### Interceptor timeout
+
+Each interceptor has a 5-second execution timeout. If an interceptor exceeds this limit, it is skipped and a warning is logged.
 
 Multiple interceptors of the same type run in registration order.
 
