@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `references/plugins.md` — plugin system reference (registration, lifecycle, globals, interceptors, security)
+- Plugin API additions in `references/api.md` (NoJS.use, NoJS.global, NoJS.dispose, sentinel symbols)
+- TypeScript type definitions listing in `references/api.md`
 - `references/cli.md` — complete NoJS CLI reference (init, dev, prebuild, validate, plugin commands with all options and config schemas)
 - CLI section in SKILL.md (instruction #9) covering all 5 commands with inline examples
 - CLI entry in ecosystem section and reference file list

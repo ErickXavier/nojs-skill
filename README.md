@@ -34,6 +34,8 @@ Copy `SKILL.md` and the `references/` directory into your skills directory.
 | `references/filters.md` | All 32 built-in filters with syntax and arguments |
 | `references/api.md` | Full JavaScript API reference |
 | `references/patterns.md` | Common patterns, scaffolds, and best practices |
+| `references/plugins.md` | Plugin system reference — registration, lifecycle, globals, interceptors, security |
+| `references/cli.md` | Complete NoJS CLI reference — init, dev, prebuild, validate, plugin commands |
 | `references/validation.md` | Template validation rules and common mistakes |
 
 ## Activation
@@ -55,7 +57,7 @@ The skill activates when it detects:
 
 ## Version
 
-This skill documents **No.JS v1.10.0**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
+This skill documents **No.JS v1.10.1**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
 
 ## License
 

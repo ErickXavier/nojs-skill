@@ -482,7 +482,7 @@ Register a reactive global variable accessible as `$name` in all expressions.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `name` | string | Variable name (without the `$` prefix). Must start with a letter and contain only `[a-zA-Z0-9_]` |
+| `name` | string | Variable name (without the `$` prefix). Must match `/^[a-zA-Z_$][a-zA-Z0-9_$]*$/` |
 | `value` | any | The value to expose. Objects are sanitized (prototype keys stripped). Functions, `eval`, and `Function` references are rejected |
 
 ```javascript
@@ -794,7 +794,7 @@ NoJS.baseApiUrl = 'https://staging-api.example.com';
 Read-only string containing the current No.JS version.
 
 ```javascript
-console.log(NoJS.version); // "1.10.0"
+console.log(NoJS.version); // "1.10.1"
 ```
 
 ```html
