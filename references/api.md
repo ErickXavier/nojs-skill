@@ -21,12 +21,17 @@ NoJS.config({
   cache: { strategy: 'none', ttl: 300000 },
   templates: { cache: true },
   sanitize: true,
+  dangerouslyDisableSanitize: false,
+  exprCacheSize: 500,
+  maxEventListeners: 100,
+  devtools: false,
   router: {
     useHash: false,
     base: '/',
     scrollBehavior: 'top',
     templates: 'pages',
-    ext: '.tpl'
+    ext: '.tpl',
+    focusBehavior: 'none'
   },
   i18n: {
     defaultLocale: 'en',
@@ -59,6 +64,10 @@ NoJS.config({
 | `cache` | object | `{ strategy: "none", ttl: 300000 }` | HTTP cache settings. `strategy`: `"none"`, `"memory"`, etc. |
 | `templates` | object | `{ cache: true }` | Template loading settings |
 | `sanitize` | boolean | `true` | Sanitize HTML in `bind-html` |
+| `dangerouslyDisableSanitize` | boolean | `false` | Explicit opt-out of HTML sanitization (use with caution) |
+| `exprCacheSize` | number | `500` | Maximum expression cache entries; uses LRU eviction |
+| `maxEventListeners` | number | `100` | Maximum event listeners per element |
+| `devtools` | boolean | `false` | Enable browser devtools panel |
 | `router` | object | See below | Router configuration |
 | `i18n` | object | See below | Internationalization settings |
 | `stores` | object | -- | Define global stores at config time (keys become store names) |
@@ -72,6 +81,7 @@ NoJS.config({
 | `scrollBehavior` | string | `"top"` | Scroll on navigate: `"top"`, `"smooth"`, or `"preserve"` |
 | `templates` | string | `"pages"` | Directory for file-based route templates |
 | `ext` | string | `".tpl"` | File extension for auto-resolved route templates |
+| `focusBehavior` | string | `"none"` | `"none"` or `"auto"` -- moves focus to new content after SPA navigation for accessible navigation |
 
 #### i18n options
 

@@ -42,7 +42,7 @@ No.JS works by walking the DOM on `DOMContentLoaded`, matching HTML attributes t
 | Priority | Directives | Purpose |
 |----------|-----------|---------|
 | 0 | `state`, `store` | Initialize reactive data first |
-| 1 | `get`, `post`, `put`, `patch`, `delete`, `error-boundary`, `i18n-ns` | Fetch data and error/i18n setup |
+| 1 | `get`, `post`, `put`, `patch`, `delete`, `error-boundary`, `i18n-ns`, `page-title`, `page-description`, `page-canonical`, `page-jsonld` | Fetch data, error/i18n setup, head management |
 | 2 | `computed`, `watch` | Derive values and observe changes |
 | 5 | `ref` | Element references |
 | 10 | `if`, `else-if`, `else`, `switch`, `each`, `foreach`, `use`, `drag-list` | Structural (add/remove DOM) |
@@ -81,6 +81,8 @@ Data lives in Proxy-backed reactive contexts that inherit from parent elements (
 
 **Templates** - `<template id="name">`, `use="tplId"`, `<slot>`, `<template src="/path.html">` (recursive loading), `include="#tpl"`. Template variables: `var="name"`. Lazy loading: `lazy` (auto), `lazy="priority"` (phase 0), `lazy="ondemand"` (routes only). Loading placeholder: `loading="#tpl"`.
 
+**Head Management** - `page-title="expr"`, `page-description="expr"`, `page-canonical="expr"`, `page-jsonld` (with `{interpolation}` in text content). Place on `<div hidden>` elements. Reactively update `<head>` elements. Priority 1.
+
 **Refs** - `ref="name"` → `$refs.name`, `call="/url"`, `trigger="eventName"`.
 
 **Errors** - `error="#tpl"`, `error-boundary`, `NoJS.config({ onError })`.
@@ -102,7 +104,7 @@ Expressions support JavaScript-like syntax against the reactive context:
 ### 5. Use the public API when needed
 
 ```javascript
-NoJS.config({ baseApiUrl, headers, timeout, retries, router, i18n, stores })
+NoJS.config({ baseApiUrl, headers, timeout, retries, router, i18n, stores, exprCacheSize, dangerouslyDisableSanitize })
 NoJS.init(root?)           // Auto-called by CDN; manual for ESM/CJS. Returns a Promise
 NoJS.use(plugin, options?) // Register a plugin ({ name, install, init?, dispose? })
 NoJS.global(name, value)   // Register reactive global ($name in expressions)
@@ -193,5 +195,5 @@ See [references/cli.md](references/cli.md) for the complete CLI reference with a
 - **npm**: `npm install @erickxavier/no-js`
 - **GitHub**: https://github.com/ErickXavier/no-js
 - **CLI**: `npm install -g @erickxavier/nojs-cli` (scaffold, dev server, prebuild, validate, plugins)
-- **VS Code Extension**: NoJS LSP (completions, diagnostics, hover docs for 39+ directives)
+- **VS Code Extension**: NoJS LSP (completions, diagnostics, hover docs for 43+ directives)
 - **Full docs**: https://no-js.dev/llms-full.txt
