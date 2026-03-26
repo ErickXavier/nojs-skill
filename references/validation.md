@@ -206,6 +206,8 @@ Any use of `bind-html` triggers a security warning because it renders raw HTML c
 <span bind="user.name"></span>
 ```
 
+**Debug/devtools warning:** When `debug` or `devtools` mode is enabled, `bind-html` with a dynamic expression (one that doesn't start with a quote character) logs a console warning: `[Security] bind-html used with dynamic expression: "..."`. This reminds you to ensure the value is trusted or sanitized.
+
 ### Expression evaluator security
 
 No.JS uses a sandboxed expression parser with an allow-list approach. `_SAFE_GLOBALS` exposes JS built-ins (Math, Date, Object, Array, etc.) and `_BROWSER_GLOBALS` exposes curated browser APIs (document, console, navigator, etc.). `fetch`, `XMLHttpRequest`, `localStorage`, `sessionStorage`, `WebSocket`, and `indexedDB` are NOT on the allow-list. Spread operations filter `_FORBIDDEN_PROPS` (`__proto__`, `constructor`, `prototype`) to prevent prototype pollution.
