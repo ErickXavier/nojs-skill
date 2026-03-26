@@ -71,6 +71,7 @@ Fetch data via HTTP GET request.
 | `debounce` | number | Debounce reactive URL refetches in ms |
 | `headers` | string | JSON string of additional headers |
 | `params` | string | Expression that resolves to query params object |
+| `skeleton` | string | ID (without `#`) of an existing DOM element to hide while loading and show again on response. Use for CLS prevention — element starts visible in HTML and No.JS hides it during the request. |
 
 ```html
 <div get="/users"
@@ -1361,6 +1362,143 @@ Use `$route.matched` to check if an explicit route was matched (vs wildcard fall
   </div>
 </template>
 ```
+
+### Route Head Attributes
+
+Set `<head>` metadata declaratively on each `<template route>`. Updated on every navigation. Expressions can use `$route` and `$store`.
+
+| Attribute | Description |
+|-----------|-------------|
+| `page-title` | Sets `document.title`. Value is a No.JS expression (single-quoted strings: `'About | Site'`) |
+| `page-description` | Creates/updates `<meta name="description">` |
+| `page-canonical` | Creates/updates `<link rel="canonical">` |
+| `page-jsonld` | Creates/updates `<script type="application/ld+json" data-nojs>`. Value is a JSON string with `{placeholder}` interpolation |
+
+```html
+<!-- Static title -->
+<template route="/about" page-title="'About Us | My Store'">
+  <h1>About</h1>
+</template>
+
+<!-- Dynamic from route params -->
+<template route="/products/:id"
+          page-title="'Product ' + $route.params.id + ' | Store'"
+          page-description="'View product ' + $route.params.id"
+          page-canonical="'/products/' + $route.params.id"
+          page-jsonld='{"@type":"Product","name":"{$route.params.id}"}'>
+  <h1>Product Detail</h1>
+</template>
+
+<!-- Expression from global store -->
+<template route="/account" page-title="$store.user.name + ' — My Account'">
+  <h1>Account</h1>
+</template>
+```
+
+- Evaluated once per navigation (not continuously reactive — `$store` changes after navigation do not re-update the title)
+- String literals require single quotes inside the double-quoted attribute: `page-title="'My Title'"` ✅, backticks are not valid in HTML attributes
+- Default outlet only — secondary outlets do not update head metadata
+- If a `<div hidden page-title>` body directive is also present, whichever runs last wins
+
+### Accessibility — `focusBehavior`
+
+Enable automatic focus management after SPA navigation:
+
+```javascript
+NoJS.config({ router: { focusBehavior: 'auto' } });
+```
+
+When `'auto'`, focus moves to the first suitable target in this order: `[autofocus]` → `[tabindex="-1"]` → `h1` → outlet element. Default is `'none'` (no change to focus).
+
+### Hash Mode Warning
+
+Enabling `useHash: true` logs a console warning about SEO impact (hash URLs are not indexed by search engines). Silence it with:
+
+```javascript
+NoJS.config({ router: { useHash: true, suppressHashWarning: true } });
+```
+
+### SPA Deployment Fallback
+
+History mode requires the server to return `index.html` for all routes. Common configs:
+
+```nginx
+# nginx
+location / { try_files $uri $uri/ /index.html; }
+```
+
+```apache
+# Apache .htaccess
+RewriteRule ^ index.html [L]
+```
+
+```
+# Netlify _redirects
+/*  /index.html  200
+```
+
+```json
+// Vercel vercel.json
+{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+```
+
+---
+
+## Head Management (Body Directives)
+
+Priority 20 directives placed on `<div hidden>` in the page body. Update `<head>` elements reactively when surrounding state changes. Use for non-routing pages (product pages, landing pages without a router). For SPA routing use route head attributes on `<template route>` instead.
+
+### `page-title`
+
+Updates `document.title` reactively.
+
+**Syntax:** `<div hidden page-title="expression"></div>`
+
+```html
+<div state='{"product": {"name": "Sneaker X"}}'>
+  <div hidden page-title="product.name + ' | My Store'"></div>
+  <h1 bind="product.name"></h1>
+</div>
+```
+
+### `page-description`
+
+Creates or updates `<meta name="description" content="...">` in `<head>`.
+
+**Syntax:** `<div hidden page-description="expression"></div>`
+
+```html
+<div hidden page-description="product.description"></div>
+```
+
+### `page-canonical`
+
+Creates or updates `<link rel="canonical" href="...">` in `<head>`.
+
+**Syntax:** `<div hidden page-canonical="expression"></div>`
+
+```html
+<div hidden page-canonical="'/products/' + product.slug"></div>
+```
+
+### `page-jsonld`
+
+Creates or updates `<script type="application/ld+json" data-nojs>` in `<head>`. Write the JSON template as the **element body** with `{placeholder}` expressions.
+
+**Syntax:** `<div hidden page-jsonld>{ "name": "{product.name}" }</div>`
+
+```html
+<div hidden page-jsonld>
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{product.name}",
+    "offers": { "@type": "Offer", "price": "{product.price}" }
+  }
+</div>
+```
+
+> Note: `{placeholder}` expressions skip JSON structural braces (only top-level `{key}` patterns matching a variable name are interpolated). The `data-nojs` marker distinguishes this tag from hand-written JSON-LD blocks.
 
 ---
 

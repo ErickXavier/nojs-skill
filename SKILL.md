@@ -48,14 +48,14 @@ No.JS works by walking the DOM on `DOMContentLoaded`, matching HTML attributes t
 | 10 | `if`, `else-if`, `else`, `switch`, `each`, `foreach`, `use`, `drag-list` | Structural (add/remove DOM) |
 | 15 | `drag`, `drop` | Drag and drop setup |
 | 16 | `drag-multiple` | Multi-select drag |
-| 20 | `bind`, `bind-*`, `bind-html`, `model`, `class-*`, `style-*`, `on:*`, `show`, `hide`, `t`, `call`, `trigger` | Rendering, events, i18n, actions |
+| 20 | `bind`, `bind-*`, `bind-html`, `model`, `class-*`, `style-*`, `on:*`, `show`, `hide`, `t`, `call`, `trigger`, `page-title`, `page-description`, `page-canonical`, `page-jsonld` | Rendering, events, i18n, actions, head management |
 | 30 | `validate` | Form validation side effects |
 
 Data lives in Proxy-backed reactive contexts that inherit from parent elements (like lexical scoping). When data changes, every bound element updates automatically.
 
 ### 2. Know the core directives
 
-**Data Fetching** - `get="/url"` with `as="varName"`, `loading`, `error`, `empty`, `success`, `refresh`, `cached`, `into`, `debounce`, `headers`, `params`. URLs support interpolation: `get="/users/{userId}"` re-fetches reactively. Mutation verbs: `post`, `put`, `patch`, `delete`.
+**Data Fetching** - `get="/url"` with `as="varName"`, `loading`, `error`, `empty`, `success`, `refresh`, `cached`, `into`, `debounce`, `headers`, `params`, `skeleton` (CLS-prevention: hides an existing DOM element during fetch). URLs support interpolation: `get="/users/{userId}"` re-fetches reactively. Mutation verbs: `post`, `put`, `patch`, `delete`. Static `get=` URLs automatically get a `<link rel="preload" as="fetch">` hint injected at init time; cross-origin URLs also get `<link rel="preconnect">`. Route templates with `src=` get `<link rel="prefetch">` at router startup.
 
 **State** - `state="{ key: value }"` (local), `store="name"` (global via `$store.name`), `computed="name" expr="expr"`, `watch="prop" on:change="handler"`, `persist`/`persist-fields`. Note: stores created via `NoJS.config({ stores })` won't be overwritten by later `<div store>` with the same name. Use `NoJS.notify()` after mutating stores from JavaScript outside expressions.
 
@@ -71,7 +71,7 @@ Data lives in Proxy-backed reactive contexts that inherit from parent elements (
 
 **Forms** - `<form validate>` with `$form` context (`valid`, `dirty`, `submitting`, `errors`, `firstError`, `reset()`). Field rules: `validate="required,email,min:5"`. Per-field state: `$form.fields.email.valid`. Triggers: `validate-on="blur"`. Conditional: `validate-if="expr"`. Auto-disables submit buttons when `$form.submitting`. Custom: `NoJS.validator('name', fn)`.
 
-**Routing** - `<a route="/path">`, `<template route="/users/:id">`, `<main route-view>`. Named outlets: `outlet="sidebar"`. Context: `$route.params`, `$route.query`, `$route.path`, `$route.matched`. Guards: `guard="expr"`. File-based: `route-view src="pages/"`. Catch-all: `route="*"`. Programmatic: `NoJS.router.push()`, `.replace()`, `.back()`, `.forward()` (return Promises).
+**Routing** - `<a route="/path">`, `<template route="/users/:id">`, `<main route-view>`. Named outlets: `outlet="sidebar"`. Context: `$route.params`, `$route.query`, `$route.path`, `$route.matched`. Guards: `guard="expr"`. File-based: `route-view src="pages/"`. Catch-all: `route="*"`. Programmatic: `NoJS.router.push()`, `.replace()`, `.back()`, `.forward()` (return Promises). **Accessibility:** `focusBehavior: 'auto'` in router config moves focus after navigation (`[autofocus]` → `[tabindex="-1"]` → `h1` → outlet). **Hash mode warning:** enabling `useHash: true` logs a console warning about SEO impact; silence with `suppressHashWarning: true`. **Route head attributes** on `<template route>`: `page-title="expr"`, `page-description="expr"`, `page-canonical="expr"`, `page-jsonld='{"@type":…}'` — update `<head>` on every navigation; expressions can use `$route` and `$store`.
 
 **Animations** - `animate="fadeIn"`, `transition="slide"`, `animate-stagger="50"`. Built-in: fadeIn, fadeOut, fadeInUp, slideInLeft, zoomIn, bounceIn, etc.
 
@@ -86,6 +86,8 @@ Data lives in Proxy-backed reactive contexts that inherit from parent elements (
 **Refs** - `ref="name"` → `$refs.name`, `call="/url"`, `trigger="eventName"`.
 
 **Errors** - `error="#tpl"`, `error-boundary`, `NoJS.config({ onError })`.
+
+**Head Management** (priority 20, non-routing pages) - Body directives on `<div hidden>` that update `<head>` reactively: `page-title="expr"` (sets `document.title`), `page-description="expr"` (updates `<meta name="description">`), `page-canonical="expr"` (updates `<link rel="canonical">`), `page-jsonld` (body content with `{placeholder}` interpolation, updates `<script type="application/ld+json" data-nojs>`). For SPA routes prefer route head attributes on `<template route>` instead.
 
 ### 3. Use the expression syntax correctly
 
