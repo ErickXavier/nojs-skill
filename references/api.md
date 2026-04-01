@@ -815,6 +815,46 @@ console.log(NoJS.version); // "1.10.0"
 
 ---
 
+## Compiler Internals
+
+These properties are **internal APIs** populated by the CLI compiler (`nojs build`). They are not part of the public API and should not be called directly by application code.
+
+### NoJS._compiled
+
+Array of pre-compiled expression functions. Each entry is a function `(scope) => value` or `(scope) => { statements }`. Populated by the `<script id="__nojs_compiled">` block injected at build time.
+
+```javascript
+// Populated by compiler — do not set manually
+// NoJS._compiled[0] = (s) => s.user.name
+// NoJS._compiled[1] = (s) => { s.count++; }
+```
+
+Directive handlers read `data-nojs-e` from elements to look up functions in this array, bypassing runtime expression parsing.
+
+### NoJS._factories
+
+Object mapping template IDs to pre-compiled factory metadata. Populated by the `<script id="__nojs_factories">` block injected at build time. Enables zero-parse template instantiation.
+
+```javascript
+// Populated by compiler — do not set manually
+// NoJS._factories["user-card"] = { bindings: 3 }
+```
+
+### NoJS._filters
+
+Object mapping filter names to their transform functions. Populated by `NoJS.filter()` calls. The compiled code generator emits direct calls to `NoJS._filters.<name>(...)` for pipe expressions instead of looking up filters at runtime.
+
+```javascript
+// Registered via NoJS.filter()
+NoJS.filter('currency', (v) => '$' + Number(v).toFixed(2));
+// Compiled pipe "price | currency" becomes:
+// (s) => NoJS._filters.currency(s.price)
+```
+
+This property is **read-only** (non-writable, non-configurable).
+
+---
+
 ## Special Context Variables
 
 These variables are available in No.JS expressions depending on the context:

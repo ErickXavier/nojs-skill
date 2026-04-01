@@ -1456,3 +1456,49 @@ The `skeleton=` attribute keeps a pre-rendered placeholder visible while a reque
 ```
 
 The skeleton is hidden automatically when the response arrives (success, cache hit, empty, or error). Start the skeleton **visible** — No.JS controls its `display` via inline style.
+
+---
+
+## 11. Dev vs Production Compilation Workflow
+
+No.JS requires zero build tooling during development. For production, the CLI compiler pre-compiles directive expressions ahead of time, eliminating runtime parsing overhead.
+
+### Development Workflow
+
+```bash
+# Scaffold and develop — no compilation needed
+nojs init my-app
+cd my-app
+nojs serve --open
+```
+
+During development, expressions are parsed at runtime by the framework's built-in evaluator. This enables instant feedback with no build step.
+
+### Production Build
+
+```bash
+# Full AOT compilation + all optimizations
+nojs build --output dist/
+```
+
+`nojs build` runs an integrated compiler with 25 passes that always performs full compilation:
+
+1. **Expression compilation** — walks all elements, classifies expressions (pure, statement, pipe, interpolation), generates pre-compiled functions, deduplicates, and annotates elements with `data-nojs-e`
+2. **Template compilation** — analyzes `<template>` elements, builds descriptors and factory functions, annotates with `data-nojs-desc`
+3. **HTML optimizations** — resource hints, head attributes, speculation rules, OG/Twitter meta, sitemap, and image optimization
+
+### CI/CD Pipeline
+
+```bash
+# In CI: validate, then compile in-place, then deploy
+nojs validate "**/*.html"
+nojs build
+# deploy dist/ or current directory
+```
+
+### Key Points
+
+- **No source changes required** — the compiler reads standard No.JS HTML and augments it
+- **Backward-compatible** — compiled and non-compiled pages can coexist; the runtime falls back to parsing if `data-nojs-e` is absent
+- **Idempotent** — running `nojs build` multiple times on the same file produces the same output (previous compiler blocks are removed first)
+- **Expressions that cannot be statically compiled** (e.g., dynamic constructs) are left for runtime parsing automatically
