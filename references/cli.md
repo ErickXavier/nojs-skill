@@ -143,7 +143,7 @@ nojs serve --no-reload      # Static server only
 
 ## `nojs build`
 
-Integrated compiler and optimization pipeline with 25 passes. Always performs full AOT compilation — no separate `--compile` flag needed.
+Integrated compiler and optimization pipeline with 29 passes plus a 3-level SSG system. Always performs full AOT compilation and SSG by default.
 
 ### Usage
 
@@ -159,6 +159,8 @@ nojs build [options]
 | `--output <dir>` | Output directory | In-place |
 | `--config <path>` | Config file path | Auto-detect |
 | `--dry-run` | Preview without writing | |
+| `--ssg <bool>` | Enable/disable Static Site Generation | `true` |
+| `--ssg-level <1-3>` | SSG optimization level (1=constant folding, 2=state resolution, 3=loop unrolling) | `3` |
 
 ### What It Does
 
@@ -166,6 +168,7 @@ nojs build [options]
 
 - **Expression compilation** — AOT-compiles directive expressions into pre-parsed AST cache and pre-compiled JavaScript functions. Annotates elements with `data-nojs-e` and injects `<script>` blocks before `</body>`.
 - **Template compilation** — generates template descriptors and factory functions for `<template>` elements. Annotates templates with `data-nojs-desc` and injects `<script id="__nojs_factories">` before `</body>`.
+- **Static Site Generation (SSG)** — bakes compile-time-resolvable values directly into HTML to eliminate first-paint flicker. Three levels: constant folding (level 1), state resolution (level 2), and loop unrolling (level 3). Adds `data-nojs-ssr` hydration markers so the runtime skips initial render for pre-rendered elements.
 - **Resource hints** — adds `<link rel="preload">` and `<link rel="preconnect">` for fetch directive URLs and route template sources. Skips interpolated URLs (`{...}` expressions).
 - **Head attribute injection** — extracts static `page-*` directive values and injects `<title>`, `<meta>`, `<link rel="canonical">`, and JSON-LD into `<head>`.
 - **Speculation rules** — generates a Speculation Rules API script from `<template route="...">` definitions for near-instant navigation.
@@ -179,6 +182,9 @@ nojs build [options]
 nojs build                         # Compile and optimize all HTML in-place
 nojs build --output dist/          # Write to dist/
 nojs build --dry-run               # Preview changes
+nojs build --ssg false             # Disable SSG (runtime-only)
+nojs build --ssg-level 1           # Constant folding only
+nojs build --ssg-level 2           # State resolution (no loop unrolling)
 ```
 
 ---
