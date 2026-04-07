@@ -1,6 +1,6 @@
 # No.JS Directives Reference
 
-Complete reference for every No.JS directive, grouped by category. Directives execute by priority: state (0) > HTTP/error-boundary/i18n-ns/head-management (1) > computed/watch (2) > ref (5) > structural (10) > drag/drop (15) > drag-multiple (16) > rendering/events/actions (20) > validation (30).
+Complete reference for every No.JS directive, grouped by category. Directives execute by priority: state (0) > HTTP/error-boundary/i18n-ns/head-management (1) > computed/watch (2) > ref (5) > structural (10) > drag/drop (15, plugin) > drag-multiple (16, plugin) > rendering/events/actions (20) > validation (30).
 
 Most directive values accept JavaScript expressions evaluated against the current reactive context. Contexts inherit from parent elements like lexical scoping.
 
@@ -18,7 +18,7 @@ Most directive values accept JavaScript expressions evaluated against the curren
 - [Forms and Validation](#forms-and-validation) -- validate, error-boundary, $form context, validators
 - [Routing](#routing) -- route, route-view, route-active, guard, outlet, $route context, file-based routing, named outlets, anchor links, 404 handling
 - [Animation](#animation) -- animate, transition, animate-enter, animate-leave, animate-stagger
-- [Drag and Drop](#drag-and-drop) -- drag, drop, drag-list, drag-multiple, all sub-attributes
+- [Drag and Drop](#drag-and-drop) -- drag, drop, drag-list, drag-multiple, all sub-attributes _(requires `@erickxavier/nojs-elements` plugin)_
 - [Internationalization](#internationalization) -- t, t-\*, i18n-ns, configuration
 - [Refs and Templates](#refs-and-templates) -- ref, use, include, slots, remote templates
 - [Head Management](#head-management) -- page-title, page-description, page-canonical, page-jsonld
@@ -1597,6 +1597,24 @@ No.JS ships with these CSS animations: `fadeIn`, `fadeOut`, `slideInLeft`, `slid
 ---
 
 ## Drag and Drop
+
+> **Plugin required:** Drag and Drop has been moved to the [`@erickxavier/nojs-elements`](https://github.com/ErickXavier/nojs-elements) plugin. Install and register to use these directives:
+>
+> ```bash
+> npm install @erickxavier/nojs-elements
+> ```
+>
+> ```javascript
+> import NojsElements from '@erickxavier/nojs-elements';
+> NoJS.use(NojsElements);
+> ```
+>
+> Or via CDN:
+>
+> ```html
+> <script src="https://cdn.jsdelivr.net/npm/@erickxavier/nojs-elements/dist/iife/nojs-elements.js"></script>
+> <script>NoJS.use(NojsElements);</script>
+> ```
 
 Declarative drag-and-drop system with sortable lists and multi-select.
 

@@ -895,7 +895,7 @@ These variables are available in No.JS expressions depending on the context:
 | `$error`   | Error templates            | Error message for the field                                                                |
 | `$rule`    | Error templates            | Name of the failing validation rule                                                        |
 
-### Drag and Drop
+### Drag and Drop (requires `@erickxavier/nojs-elements` plugin)
 
 | Variable     | Where              | Description                                      |
 |--------------|--------------------|--------------------------------------------------|

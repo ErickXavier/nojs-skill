@@ -45,9 +45,9 @@ No.JS works by walking the DOM on `DOMContentLoaded`, matching HTML attributes t
 | 1 | `get`, `post`, `put`, `patch`, `delete`, `error-boundary`, `i18n-ns`, `page-title`, `page-description`, `page-canonical`, `page-jsonld` | Fetch data, error/i18n setup, head management |
 | 2 | `computed`, `watch` | Derive values and observe changes |
 | 5 | `ref` | Element references |
-| 10 | `if`, `else-if`, `else`, `switch`, `each`, `foreach`, `use`, `drag-list` | Structural (add/remove DOM) |
-| 15 | `drag`, `drop` | Drag and drop setup |
-| 16 | `drag-multiple` | Multi-select drag |
+| 10 | `if`, `else-if`, `else`, `switch`, `each`, `foreach`, `use`, `drag-list` _(plugin)_ | Structural (add/remove DOM) |
+| 15 | `drag`, `drop` _(plugin)_ | Drag and drop setup (requires `@erickxavier/nojs-elements`) |
+| 16 | `drag-multiple` _(plugin)_ | Multi-select drag (requires `@erickxavier/nojs-elements`) |
 | 20 | `bind`, `bind-*`, `bind-html`, `model`, `class-*`, `style-*`, `on:*`, `show`, `hide`, `t`, `call`, `trigger`, `page-title`, `page-description`, `page-canonical`, `page-jsonld` | Rendering, events, i18n, actions, head management |
 | 30 | `validate` | Form validation side effects |
 
@@ -77,7 +77,7 @@ Data lives in Proxy-backed reactive contexts that inherit from parent elements (
 
 **i18n** - `t="key"`, `t-name="expr"`, `t-html` (render translation as sanitized HTML), `i18n-ns="namespace"`, pluralization `"one item | {count} items"`. Namespace mode: `loadPath: '/locales/{locale}/{ns}.json'`. Formatting filters: `currency`, `date`, `datetime`, `relative`, `number`, `percent`. Context: `$i18n.locale`.
 
-**DnD** - `drag`, `drop="handler"`, `drag-list="items"`, `drag-multiple`.
+**DnD** _(requires `@erickxavier/nojs-elements` plugin -- `NoJS.use(NojsElements)`)_ - `drag`, `drop="handler"`, `drag-list="items"`, `drag-multiple`.
 
 **Templates** - `<template id="name">`, `use="tplId"`, `<slot>`, `<template src="/path.html">` (recursive loading), `include="#tpl"`. Template variables: `var="name"`. Lazy loading: `lazy` (auto), `lazy="priority"` (phase 0), `lazy="ondemand"` (routes only). Loading placeholder: `loading="#tpl"`.
 
