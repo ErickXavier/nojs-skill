@@ -1,14 +1,18 @@
 # NoJS CLI Reference
 
-The official command-line tool for the No.JS framework. Scaffold projects, optimize HTML for production, run a dev server with live reload, validate templates, and manage plugins.
+The official command-line tool for the No.JS framework. Scaffold projects, compile and optimize HTML for production, run a dev server with live reload, and validate templates.
 
 ## Install
 
 ```bash
-npm install -g @erickxavier/nojs-cli
+# macOS / Linux
+curl -fsSL https://no-js.dev/install.sh | sh
+
+# Or via Cargo
+cargo install nojs-cli
 ```
 
-Requires **Node.js >= 18**. After installing, the `nojs` command is available globally.
+After installing, the `nojs` command is available globally.
 
 ---
 
@@ -17,10 +21,9 @@ Requires **Node.js >= 18**. After installing, the `nojs` command is available gl
 | Command | Alias | Description |
 |---------|-------|-------------|
 | `nojs init [path]` | `i` | Scaffold a new No.JS project |
-| `nojs prebuild [dir]` | `b` | Build-time HTML optimization |
-| `nojs dev [path]` | `d` | Local dev server with live reload |
-| `nojs validate [files]` | `v` | Validate No.JS templates |
-| `nojs plugin <action>` | `p` | Manage plugins (search, install, update, remove, list) |
+| `nojs build [dir]` | `b` | Compile and optimize HTML for production |
+| `nojs serve [path]` | `s` | Local dev server with SSE live reload |
+| `nojs validate [files]` | `v` | Validate No.JS templates and i18n |
 | `nojs help` | | Show help |
 | `nojs version` | | Show CLI version |
 
@@ -76,7 +79,7 @@ my-app/
 ├── locales/                # (if i18n)
 │   ├── en.json
 │   └── pt.json
-└── nojs.config.json        # Project metadata + plugins list
+└── nojs.config.json        # Project metadata
 ```
 
 ### Examples
@@ -94,14 +97,14 @@ nojs init my-app -y
 
 ---
 
-## `nojs dev`
+## `nojs serve`
 
 Local HTTP dev server with Server-Sent Events (SSE) live reload.
 
 ### Usage
 
 ```bash
-nojs dev [path] [options]
+nojs serve [path] [options]
 ```
 
 ### Options
@@ -128,24 +131,24 @@ When live reload is enabled, the server injects an SSE client script before `</b
 ### Examples
 
 ```bash
-nojs dev                  # Serve current directory on port 3000
-nojs dev ./docs/          # Serve a specific directory
-nojs dev --port 8080      # Custom port
-nojs dev --open           # Open browser on start
-nojs dev --quiet          # No request logging
-nojs dev --no-reload      # Static server only
+nojs serve                  # Serve current directory on port 3000
+nojs serve ./docs/          # Serve a specific directory
+nojs serve --port 8080      # Custom port
+nojs serve --open           # Open browser on start
+nojs serve --quiet          # No request logging
+nojs serve --no-reload      # Static server only
 ```
 
 ---
 
-## `nojs prebuild`
+## `nojs build`
 
-Build-time HTML optimization pipeline with 6 plugins.
+Integrated compiler and optimization pipeline with 29 passes plus a 3-level SSG system. Always performs full AOT compilation and SSG by default.
 
 ### Usage
 
 ```bash
-nojs prebuild [options]
+nojs build [options]
 ```
 
 ### Options
@@ -155,99 +158,33 @@ nojs prebuild [options]
 | `--input <glob>` | HTML files glob pattern | `**/*.html` |
 | `--output <dir>` | Output directory | In-place |
 | `--config <path>` | Config file path | Auto-detect |
-| `--plugin <name>` | Run only specific plugin(s) | All |
-| `--list` | List available plugins | |
 | `--dry-run` | Preview without writing | |
+| `--ssg <bool>` | Enable/disable Static Site Generation | `true` |
+| `--ssg-level <1-3>` | SSG optimization level (1=constant folding, 2=state resolution, 3=loop unrolling) | `3` |
 
-### Configuration
+### What It Does
 
-Auto-detected from project root:
-1. `nojs-prebuild.config.js`
-2. `nojs-prebuild.config.mjs`
+`nojs build` runs a single integrated pipeline that includes:
 
-```javascript
-export default {
-  input: "**/*.html",
-  output: null,             // null = overwrite in-place
-  plugins: {
-    "inject-resource-hints": true,
-    "inject-head-attrs": true,
-    "inject-speculation-rules": { action: "prerender", eagerness: "moderate" },
-    "inject-og-twitter": { siteName: "My Site", twitterSite: "@handle" },
-    "generate-sitemap": { baseUrl: "https://example.com" },
-    "optimize-images": { lcpSelector: "img.hero" }
-  }
-}
-```
-
-### Plugins
-
-#### `inject-resource-hints`
-
-Adds `<link rel="preload">` and `<link rel="preconnect">` for fetch directive URLs and route template sources. Skips interpolated URLs (`{...}` expressions).
-
-#### `inject-head-attrs`
-
-Extracts static `page-*` directive values and injects into `<head>`:
-- `page-title` → `<title>`
-- `page-description` → `<meta name="description">`
-- `page-canonical` → `<link rel="canonical">`
-- `page-jsonld` → `<script type="application/ld+json">`
-
-#### `inject-speculation-rules`
-
-Generates a [Speculation Rules API](https://developer.chrome.com/docs/web-platform/prerender-pages) script from `<template route="...">` definitions for near-instant navigation.
-
-| Option | Default | Values |
-|--------|---------|--------|
-| `action` | `"prerender"` | `"prerender"`, `"prefetch"` |
-| `eagerness` | `"moderate"` | `"eager"`, `"moderate"`, `"conservative"` |
-| `excludePatterns` | `[]` | Array of route patterns to skip |
-
-Only includes static routes (no `:param` segments). Skips `route="*"`.
-
-#### `inject-og-twitter`
-
-Generates Open Graph and Twitter Card meta tags from `page-*` directives.
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `type` | `"website"` | `og:type` value |
-| `defaultImage` | — | `og:image` and `twitter:image` |
-| `siteName` | — | `og:site_name` |
-| `twitterCard` | `"summary"` | `twitter:card` value |
-| `twitterSite` | — | `twitter:site` handle |
-
-#### `generate-sitemap`
-
-Generates `sitemap.xml` from route definitions and canonical URLs.
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `baseUrl` | (required) | Base URL for sitemap entries |
-| `changefreq` | `"weekly"` | Change frequency |
-| `priority` | `0.8` | URL priority |
-| `excludePatterns` | `[]` | Routes to exclude |
-
-#### `optimize-images`
-
-Adds lazy loading, LCP preload, and `fetchpriority` hints to `<img>` tags.
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `lcpSelector` | — | CSS selector for LCP image (gets `fetchpriority="high"` + preload) |
-| `skipLazy` | — | CSS selector for images to exclude from lazy loading |
-
-Non-LCP images get `loading="lazy"` and `decoding="async"`.
+- **Expression compilation** — AOT-compiles directive expressions into pre-parsed AST cache and pre-compiled JavaScript functions. Annotates elements with `data-nojs-e` and injects `<script>` blocks before `</body>`.
+- **Template compilation** — generates template descriptors and factory functions for `<template>` elements. Annotates templates with `data-nojs-desc` and injects `<script id="__nojs_factories">` before `</body>`.
+- **Static Site Generation (SSG)** — bakes compile-time-resolvable values directly into HTML to eliminate first-paint flicker. Three levels: constant folding (level 1), state resolution (level 2), and loop unrolling (level 3). Adds `data-nojs-ssr` hydration markers so the runtime skips initial render for pre-rendered elements.
+- **Resource hints** — adds `<link rel="preload">` and `<link rel="preconnect">` for fetch directive URLs and route template sources. Skips interpolated URLs (`{...}` expressions).
+- **Head attribute injection** — extracts static `page-*` directive values and injects `<title>`, `<meta>`, `<link rel="canonical">`, and JSON-LD into `<head>`.
+- **Speculation rules** — generates a Speculation Rules API script from `<template route="...">` definitions for near-instant navigation.
+- **Open Graph / Twitter meta** — generates OG and Twitter Card meta tags from `page-*` directives.
+- **Sitemap generation** — generates `sitemap.xml` from route definitions and canonical URLs.
+- **Image optimization** — adds lazy loading, LCP preload, and `fetchpriority` hints to `<img>` tags.
 
 ### Examples
 
 ```bash
-nojs prebuild                         # Process all HTML in-place
-nojs prebuild --output dist/          # Write to dist/
-nojs prebuild --plugin generate-sitemap --plugin optimize-images
-nojs prebuild --dry-run               # Preview changes
-nojs prebuild --list                  # Show available plugins
+nojs build                         # Compile and optimize all HTML in-place
+nojs build --output dist/          # Write to dist/
+nojs build --dry-run               # Preview changes
+nojs build --ssg false             # Disable SSG (runtime-only)
+nojs build --ssg-level 1           # Constant folding only
+nojs build --ssg-level 2           # State resolution (no loop unrolling)
 ```
 
 ---
@@ -328,100 +265,14 @@ nojs validate "**/*.html"             # Recursive glob
 
 ---
 
-## `nojs plugin`
-
-Hybrid plugin manager — CDN for official plugins, npm for community packages.
-
-### Usage
-
-```bash
-nojs plugin <action> [name]
-```
-
-### Actions
-
-#### `search <query>`
-
-Searches both the CDN registry (`cdn.no-js.dev/plugins/registry.json`) and npm simultaneously.
-
-```bash
-nojs plugin search analytics
-```
-
-#### `install <name>`
-
-Install a plugin. Prefix with `npm:` for npm packages.
-
-```bash
-nojs plugin install carousel              # CDN (official)
-nojs plugin install npm:@someone/carousel # npm (community)
-```
-
-- **CDN plugins**: Fetched from `cdn.no-js.dev/plugins/{name}.js`, SRI integrity hash (sha384) computed automatically
-- **npm plugins**: Installed via `npm install`, referenced from `node_modules/`
-
-After install, outputs the HTML `<script>` snippet to add to your page.
-
-#### `update <name>`
-
-Re-fetches CDN plugins (recomputes integrity) or runs `npm update` for npm plugins.
-
-```bash
-nojs plugin update carousel
-```
-
-#### `remove <name>`
-
-Removes a plugin from the project config and uninstalls npm packages.
-
-```bash
-nojs plugin remove carousel
-```
-
-#### `list`
-
-Lists all installed plugins with source and URL.
-
-```bash
-nojs plugin list
-```
-
-### Plugin Config in `nojs.config.json`
-
-```json
-{
-  "plugins": [
-    {
-      "name": "carousel",
-      "source": "cdn",
-      "url": "https://cdn.no-js.dev/plugins/carousel.js",
-      "integrity": "sha384-...",
-      "installed": "2025-03-25"
-    },
-    {
-      "name": "@someone/carousel",
-      "source": "npm",
-      "installed": "2025-03-25"
-    }
-  ]
-}
-```
-
-### SRI (Subresource Integrity)
-
-CDN plugins automatically get SHA384 integrity hashes. The generated `<script>` tag includes `integrity` and `crossorigin` attributes for tamper protection.
-
----
-
 ## `nojs.config.json`
 
-Project configuration file generated by `nojs init` and managed by `nojs plugin`.
+Project configuration file generated by `nojs init`.
 
 ```json
 {
   "name": "my-app",
-  "version": "0.1.0",
-  "plugins": []
+  "version": "0.1.0"
 }
 ```
 
@@ -429,7 +280,6 @@ Project configuration file generated by `nojs init` and managed by `nojs plugin`
 |-----|------|-------------|
 | `name` | string | Project name |
 | `version` | string | Project version (semver) |
-| `plugins` | array | Installed plugins (managed by `nojs plugin`) |
 
 ---
 
@@ -441,14 +291,11 @@ nojs init my-app --routing --i18n --locales en,pt -y
 cd my-app
 
 # 2. Develop with live reload
-nojs dev --open
+nojs serve --open
 
-# 3. Install a plugin
-nojs plugin install analytics
-
-# 4. Validate templates before deploy
+# 3. Validate templates before deploy
 nojs validate *.html
 
-# 5. Optimize for production
-nojs prebuild --output dist/
+# 4. Compile and optimize for production
+nojs build --output dist/
 ```
