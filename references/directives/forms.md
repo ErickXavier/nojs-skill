@@ -26,13 +26,13 @@ Built-in form validation with `$form` context. No.JS automatically detects nativ
 
 Enable validation on a form or field.
 
-**Syntax:** `<form validate>` (on form) or `<input validate="validatorName">` (on field)
+**Syntax:** `<form validate>` (on form) or `<input validate="rule1|rule2|rule3:arg">` (on field)
 
-Native HTML5 attributes (`required`, `minlength`, `maxlength`, `type="email"`, `type="url"`, `min`, `max`, `pattern`) work automatically.
+Rules are separated by `|` (pipe) and arguments by `:` (colon). Native HTML5 attributes (`required`, `minlength`, `maxlength`, `type="email"`, `type="url"`, `min`, `max`, `pattern`) work automatically.
 
 ```html
 <form validate state="{ email: '', password: '' }">
-  <input model="email" validate="required,email"
+  <input model="email" validate="required|email"
          error-required="Email is required"
          error-email="Please enter a valid email">
   <input model="password" type="password" validate="required"
@@ -102,6 +102,7 @@ Inside any `<form>` with the `validate` attribute:
 | `$form.fields.{name}.error` | string or null | Error message for this field |
 | `$form.fields.{name}.dirty` | boolean | Whether this field has been modified |
 | `$form.fields.{name}.touched` | boolean | Whether this field has been focused and blurred |
+| `$form.fields.{name}.value` | any | Current value of this field |
 
 Field aliases: use the `as` attribute on an input to expose its state under a custom name:
 

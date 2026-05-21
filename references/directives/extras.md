@@ -372,6 +372,7 @@ Available inside `drop` expressions:
 | `$dropIndex` | number | Insertion index within the drop zone |
 | `$source` | object or null | `{ list, index, el }` -- source info |
 | `$target` | object or null | `{ list, index, el }` -- target info |
+| `$el` | Element | The drop zone element |
 
 ### Automatic CSS Classes
 

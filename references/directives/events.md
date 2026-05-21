@@ -50,8 +50,7 @@ Event handler -- supports all DOM events plus lifecycle hooks.
 | `.escape` | Escape |
 | `.tab` | Tab |
 | `.space` | Space |
-| `.delete` | Delete/Backspace |
-| `.backspace` | Backspace |
+| `.delete` | Delete or Backspace |
 | `.up` | ArrowUp |
 | `.down` | ArrowDown |
 | `.left` | ArrowLeft |
@@ -86,7 +85,7 @@ Inside any `on:*` handler:
 |------|------|
 | `on:init` | Directive first processed |
 | `on:mounted` | Element inserted into visible DOM |
-| `on:updated` | Any reactive dependency changed |
+| `on:updated` | Any DOM mutation in subtree (child/attribute/text changes) |
 | `on:unmounted` | Element removed from DOM |
 | `on:error` | Any error in this element's subtree |
 
