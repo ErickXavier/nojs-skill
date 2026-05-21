@@ -162,6 +162,7 @@ See [references/cli.md](references/cli.md) for the complete CLI reference with a
 | Common patterns and scaffolds | [references/patterns.md](references/patterns.md) |
 | Template validation rules and common mistakes | [references/validation.md](references/validation.md) |
 | CLI commands (`init`, `dev`, `prebuild`, `validate`, `plugin`) | [references/cli.md](references/cli.md) |
+| Debugging issues, console warnings, common mistakes | [references/troubleshooting.md](references/troubleshooting.md) |
 
 ## Workflow checklists
 
