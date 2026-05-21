@@ -1065,6 +1065,7 @@ ctx.count = 5; // Triggers watcher
 const child = NoJS.createContext({ color: 'blue' }, ctx);
 console.log(child.name);  // "World" (inherited from parent)
 console.log(child.color); // "blue" (own property)
+console.log('name' in child); // true (the `in` operator checks the parent chain)
 ```
 
 ### NoJS.evaluate(expr, ctx)
