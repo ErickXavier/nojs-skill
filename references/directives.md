@@ -22,7 +22,7 @@ Most directive values accept JavaScript expressions evaluated against the curren
 - [Internationalization](#internationalization) -- t, t-\*, i18n-ns, configuration
 - [Refs and Templates](#refs-and-templates) -- ref, use, include, slots, remote templates
 - [Head Management](#head-management) -- page-title, page-description, page-canonical, page-jsonld
-- [Miscellaneous](#miscellaneous) -- error-boundary
+- [Miscellaneous](#miscellaneous) -- call, error-boundary
 
 ---
 
@@ -1465,13 +1465,13 @@ RewriteRule ^ index.html [L]
 
 ---
 
-## Head Management (Body Directives)
+## Head Management
 
-Priority 20 directives placed on `<div hidden>` in the page body. Update `<head>` elements reactively when surrounding state changes. Use for non-routing pages (product pages, landing pages without a router). For SPA routing use route head attributes on `<template route>` instead.
+Reactive directives that update `<head>` elements (title, meta, canonical, JSON-LD) from the page body. Place on `<div hidden>` host elements. Priority 1. Use for non-routing pages (product pages, landing pages without a router). For SPA routing use route head attributes on `<template route>` instead.
 
 ### `page-title`
 
-Updates `document.title` reactively.
+Reactively set the document `<title>`. Value is a No.JS expression. Watches the expression and updates `<title>` whenever the reactive context changes.
 
 **Syntax:** `<div hidden page-title="expression"></div>`
 
@@ -1482,9 +1482,13 @@ Updates `document.title` reactively.
 </div>
 ```
 
+```html
+<div hidden page-title="'About Us | My Store'"></div>
+```
+
 ### `page-description`
 
-Creates or updates `<meta name="description" content="...">` in `<head>`.
+Reactively set `<meta name="description">` in `<head>`. Creates the tag if it doesn't exist.
 
 **Syntax:** `<div hidden page-description="expression"></div>`
 
@@ -1494,7 +1498,7 @@ Creates or updates `<meta name="description" content="...">` in `<head>`.
 
 ### `page-canonical`
 
-Creates or updates `<link rel="canonical" href="...">` in `<head>`.
+Reactively set `<link rel="canonical">` in `<head>`. Creates the tag if it doesn't exist.
 
 **Syntax:** `<div hidden page-canonical="expression"></div>`
 
@@ -1504,9 +1508,9 @@ Creates or updates `<link rel="canonical" href="...">` in `<head>`.
 
 ### `page-jsonld`
 
-Creates or updates `<script type="application/ld+json" data-nojs>` in `<head>`. Write the JSON template as the **element body** with `{placeholder}` expressions.
+Reactively set `<script type="application/ld+json" data-nojs>` in `<head>`. Value is either a No.JS expression that evaluates to an object (JSON.stringify is applied) or a JSON string with `{interpolation}` placeholders in the element's text content.
 
-**Syntax:** `<div hidden page-jsonld>{ "name": "{product.name}" }</div>`
+**Syntax:** `<div hidden page-jsonld>{ JSON template with {placeholders} }</div>`
 
 ```html
 <div hidden page-jsonld>
@@ -1519,7 +1523,9 @@ Creates or updates `<script type="application/ld+json" data-nojs>` in `<head>`. 
 </div>
 ```
 
-> Note: `{placeholder}` expressions skip JSON structural braces (only top-level `{key}` patterns matching a variable name are interpolated). The `data-nojs` marker distinguishes this tag from hand-written JSON-LD blocks.
+The `data-nojs` marker on the generated `<script>` tag distinguishes it from hand-written JSON-LD so they can coexist.
+
+> **Note:** `<script>` elements are skipped by `processTree`, so use `<div hidden>` as the host element for all head management directives.
 
 ---
 
@@ -2202,65 +2208,6 @@ Supports the same attributes as HTTP directives. Rapid clicks automatically abor
 **Request lifecycle:** `click -> [confirm?] -> [loading] -> [success | error]`
 
 **Events emitted:** `fetch:success` (`{ url, data }`) and `fetch:error` (`{ url, error }`) on the document.
-
----
-
-## Head Management
-
-Reactive directives that update `<head>` elements (title, meta, canonical, JSON-LD) from the page body. Place on `<div hidden>` host elements. Priority 1.
-
-### `page-title`
-
-Reactively set the document `<title>`. Value is a No.JS expression.
-
-**Syntax:** `<div hidden page-title="expression">`
-
-```html
-<div hidden page-title="product.name + ' | My Store'"></div>
-<div hidden page-title="'About Us | My Store'"></div>
-```
-
-Watches the expression and updates `<title>` whenever the reactive context changes.
-
-### `page-description`
-
-Reactively set `<meta name="description">` in `<head>`. Creates the tag if it doesn't exist.
-
-**Syntax:** `<div hidden page-description="expression">`
-
-```html
-<div hidden page-description="product.description"></div>
-```
-
-### `page-canonical`
-
-Reactively set `<link rel="canonical">` in `<head>`. Creates the tag if it doesn't exist.
-
-**Syntax:** `<div hidden page-canonical="expression">`
-
-```html
-<div hidden page-canonical="'/products/' + product.slug"></div>
-```
-
-### `page-jsonld`
-
-Reactively set `<script type="application/ld+json" data-nojs>` in `<head>`. Value is either a No.JS expression that evaluates to an object (JSON.stringify is applied) or a JSON string with `{interpolation}` placeholders in the element's text content.
-
-**Syntax:** `<div hidden page-jsonld>{ JSON template with {placeholders} }</div>`
-
-```html
-<div hidden page-jsonld>
-  { "@type": "Product", "name": "{product.name}", "price": "{product.price}" }
-</div>
-```
-
-The `data-nojs` marker on the generated `<script>` tag distinguishes it from hand-written JSON-LD so they can coexist.
-
-> **Note:** `<script>` elements are skipped by `processTree`, so use `<div hidden>` as the host element for all head management directives.
-
----
-
-## Miscellaneous
 
 ### `error-boundary`
 
