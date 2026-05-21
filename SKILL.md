@@ -74,7 +74,7 @@ Directives are organized into eight categories. Each summary below provides enou
 
 **Control Flow** -- `if`/`else-if`/`else`, `show`/`hide` (CSS toggle), `switch`/`case`/`default`. Loops: `foreach`/`each`/`for` (aliases, same handler) with `filter`, `sort`, `limit`, `offset`, `key`. Loop vars: `$index`, `$count`, `$first`, `$last`, `$even`, `$odd`. See [references/directives/control-flow.md](references/directives/control-flow.md).
 
-**Events** -- `on:click="expr"` with modifiers (`.prevent`, `.stop`, `.once`, `.debounce.300`, `.throttle.100`). Key mods, lifecycle hooks (`on:init`, `on:mounted`, `on:updated`, `on:unmounted`). Vars: `$event`, `$el`. See [references/directives/events.md](references/directives/events.md).
+**Events** -- `on:click="expr"` with modifiers (`.prevent`, `.stop`, `.once`, `.debounce.300`, `.throttle.100`). Key mods, lifecycle hooks (`on:init`, `on:mounted`, `on:updated`, `on:unmounted`, `on:error`). Vars: `$event`, `$el`. See [references/directives/events.md](references/directives/events.md).
 
 **Routing** -- `<a route>`, `<template route>`, `<main route-view>`. View Transition API with presets (`slide`, `fade`, `scale`, `none`). Guards, named outlets, `$route` context, file-based routing, head attributes. See [references/directives/routing.md](references/directives/routing.md).
 
