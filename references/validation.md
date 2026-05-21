@@ -1,6 +1,6 @@
 # No.JS Template Validation Reference
 
-Rules, common mistakes, and a checklist for validating No.JS templates. Based on the `validate_template` MCP tool logic.
+Rules, common mistakes, and a checklist for validating No.JS templates. Based on the NoJS validation rules.
 
 ---
 

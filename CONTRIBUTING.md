@@ -18,7 +18,6 @@ The NoJS Skill is part of the No.JS ecosystem:
 | --- | --- |
 | [no-js](https://github.com/ErickXavier/no-js) | Core framework (source of truth) |
 | [nojs-lsp](https://github.com/ErickXavier/nojs-lsp) | VS Code language server extension |
-| [nojs-mcp](https://github.com/ErickXavier/nojs-mcp) | MCP server for AI assistants |
 | [nojs-skill](https://github.com/ErickXavier/nojs-skill) | AI skill for Claude Code and others |
 
 ---

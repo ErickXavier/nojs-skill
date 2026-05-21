@@ -52,13 +52,12 @@ The skill activates when it detects:
 | --- | --- |
 | [No.JS](https://github.com/ErickXavier/no-js) | Core framework (zero dependencies) |
 | [NoJS LSP](https://github.com/ErickXavier/nojs-lsp) | VS Code extension — completions, diagnostics, hover docs |
-| [NoJS MCP](https://github.com/ErickXavier/nojs-mcp) | MCP server for AI assistants |
 | [NoJS CLI](https://github.com/ErickXavier/nojs-cli) | Command-line tool for scaffolding and managing No.JS projects |
 | **NoJS Skill** | This project — AI skill for Claude Code |
 
 ## Version
 
-This skill documents **No.JS v1.11.0**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
+This skill documents **No.JS v1.11.1**. The framework source code is the ground truth — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to keep the skill in sync.
 
 ## License
 
