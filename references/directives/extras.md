@@ -197,7 +197,7 @@ No.JS adds/removes these classes during the transition:
 
 ### Built-in Animation Names
 
-No.JS ships with these CSS animations: `fadeIn`, `fadeOut`, `slideInLeft`, `slideInRight`, `slideInUp`, `slideInDown`, `slideOutLeft`, `slideOutRight`, `slideOutUp`, `slideOutDown`, `zoomIn`, `zoomOut`, `bounceIn`, `flipIn`
+No.JS ships with these CSS animations: `fadeIn`, `fadeOut`, `fadeInUp`, `fadeInDown`, `fadeOutUp`, `fadeOutDown`, `slideInLeft`, `slideInRight`, `slideOutLeft`, `slideOutRight`, `zoomIn`, `zoomOut`, `bounceIn`, `bounceOut`
 
 ---
 
@@ -265,8 +265,6 @@ The `drop` expression executes when an item is dropped. Use `$drag` to access th
 | `drop-sort` | string | -- | `"vertical"`, `"horizontal"`, or `"grid"` -- enables sortable reorder |
 | `drop-placeholder` | template ID or `"auto"` | -- | Shows placeholder at insertion point |
 | `drop-placeholder-class` | string | `"nojs-drop-placeholder"` | Class for the placeholder |
-| `drop-settle-class` | string | `"nojs-drop-settle"` | CSS class for settle animation |
-| `drop-empty-class` | string | `"nojs-drag-list-empty"` | CSS class for empty state |
 
 ```html
 <div drop="items = [...items, $drag]" drop-accept="task">
@@ -295,16 +293,21 @@ High-level shorthand for sortable lists bound to state arrays. Combines `each` +
 | `template` | template ID | -- | Template for each item |
 | `drag-list-key` | property name | -- | Unique key per item for stable identity |
 | `drag-list-item` | variable name | `"item"` | Loop variable name in template |
+| `drag-type` | string | auto | Named type for items. Default: `"__draglist_" + listPath` |
 | `drop-sort` | string | `"vertical"` | `"vertical"`, `"horizontal"`, or `"grid"` |
-| `drop-accept` | string | self | Types accepted |
+| `drop-accept` | string | same as `drag-type` | Types accepted |
 | `drag-list-copy` | boolean | -- | Copy items instead of moving |
 | `drag-list-remove` | boolean | -- | Remove items when dragged out |
 | `drag-disabled` | expression | `false` | Disables dragging from this list |
 | `drop-disabled` | expression | `false` | Disables dropping into this list |
 | `drop-max` | expression | Infinity | Max items allowed |
-| `drop-settle-class` | string | `"nojs-drop-settle"` | CSS class for settle animation |
-| `drop-empty-class` | string | `"nojs-drag-list-empty"` | CSS class for empty state |
+| `drag-class` | string | `"nojs-dragging"` | Class added to items while dragging |
+| `drop-class` | string | `"nojs-drag-over"` | Class added to list while valid item hovers |
+| `drop-reject-class` | string | `"nojs-drop-reject"` | Class when item is rejected |
+| `drop-settle-class` | string | `"nojs-drop-settle"` | CSS class for settle animation after drop |
+| `drop-empty-class` | string | `"nojs-drag-list-empty"` | CSS class for empty list state |
 | `drop-placeholder` | template ID or `"auto"` | -- | Placeholder at drop position |
+| `drop-placeholder-class` | string | `"nojs-drop-placeholder"` | Class for the placeholder |
 
 ```html
 <!-- Basic sortable list -->

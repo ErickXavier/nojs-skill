@@ -11,7 +11,7 @@ Declarative HTTP requests via HTML attributes. Priority 1.
   - [put](#put) -- update data via HTTP PUT (full replacement)
   - [patch](#patch) -- partial update via HTTP PATCH
   - [delete](#delete) -- delete data via HTTP DELETE
-  - [Mutation Attributes](#mutation-attributes-postputpatchdelete) -- body, success, error, loading, confirm, redirect, then, into, cached
+  - [Mutation Attributes](#mutation-attributes-postputpatchdelete) -- body, success, error, loading, confirm, redirect, then, into, cached, retry, retry-delay
   - [as](#as) -- name for fetched data in local context
   - [body](#body) -- request body for POST/PUT/PATCH
   - [headers](#headers) -- custom request headers
@@ -20,6 +20,8 @@ Declarative HTTP requests via HTML attributes. Priority 1.
   - [into](#into) -- write response to global store
   - [debounce](#debounce) -- debounce reactive URL refetches
   - [refresh](#refresh) -- auto-refresh interval for polling
+  - [retry](#retry) -- retry count on failure
+  - [retry-delay](#retry-delay) -- delay between retries
 
 ---
 
@@ -69,6 +71,9 @@ Fetch data via HTTP GET request.
 | `headers` | string | JSON string of additional headers |
 | `params` | string | Expression that resolves to query params object |
 | `skeleton` | string | ID (without `#`) of an existing DOM element to hide while loading and show again on response. Use for CLS prevention — element starts visible in HTML and No.JS hides it during the request. |
+| `retry` | number | Number of retry attempts on failure. Default: value from `NoJS.config({ retries })` |
+| `retry-delay` | number | Delay in ms between retries. Default: `1000` |
+| `var` | string | Variable name for response data in success/error templates. Overrides the template's own `var` attribute |
 
 ```html
 <div get="/users"
@@ -155,6 +160,9 @@ Delete data via HTTP DELETE request.
 | `then` | Expression to execute on success (e.g. `"users.push(result)"`) |
 | `into` | Write response to a named global store |
 | `cached` | Cache responses (memory/local/session) |
+| `retry` | Number of retry attempts on failure. Default: value from `NoJS.config({ retries })` |
+| `retry-delay` | Delay in ms between retries. Default: `1000` |
+| `var` | Variable name for response data in success/error templates |
 
 **Request lifecycle:** `[idle] -> [loading] -> [success | error]`
 
@@ -246,5 +254,27 @@ The element re-fetches its URL at the specified interval. Polling stops automati
 ```html
 <div get="/api/status" refresh="5000" as="status">
   <span bind="status.healthy ? 'Online' : 'Degraded'"></span>
+</div>
+```
+
+### `retry`
+
+Number of retry attempts on failure.
+
+**Syntax:** `<element get="/data" retry="3">`
+
+Default: value from `NoJS.config({ retries })`. Set `retry="0"` to disable retries for a specific request.
+
+### `retry-delay`
+
+Delay in milliseconds between retry attempts.
+
+**Syntax:** `<element get="/data" retry="3" retry-delay="2000">`
+
+Default: `1000` ms (or value from `NoJS.config({ retryDelay })`).
+
+```html
+<div get="/api/unreliable" retry="3" retry-delay="2000" as="data">
+  <span bind="data.value"></span>
 </div>
 ```

@@ -12,6 +12,7 @@ Local and global reactive state, one-way/two-way data binding, and dynamic CSS c
   - [persist](#persist) -- persist state to storage
   - [persist-key](#persist-key) -- custom storage key
   - [persist-fields](#persist-fields) -- limit persisted fields
+  - [persist-schema](#persist-schema) -- type-safe restoration of persisted state
   - [Mutating Stores from JavaScript](#mutating-stores-from-javascript) -- NoJS.notify() for external changes
 - [Rendering and Binding](#rendering-and-binding) -- one-way and two-way data binding (priority 20)
   - [bind](#bind) -- one-way text binding
@@ -156,6 +157,21 @@ When specified, only the listed fields are saved to and restored from storage. A
      persist-key="prefs"
      persist-fields="theme,sidebar">
   <!-- Only theme and sidebar are persisted; tempData always starts as null -->
+</div>
+```
+
+### `persist-schema`
+
+Enable type-safe restoration of persisted state. When present, restoring ignores keys not in the initial state and warns on type mismatches.
+
+**Syntax:** `<element state="{...}" persist="localStorage" persist-key="key" persist-schema>`
+
+```html
+<div state="{ count: 0, name: 'World' }"
+     persist="localStorage"
+     persist-key="myState"
+     persist-schema>
+  <!-- Unknown keys in storage are ignored; type mismatches log warnings -->
 </div>
 ```
 

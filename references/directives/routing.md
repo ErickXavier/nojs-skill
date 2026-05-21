@@ -25,6 +25,7 @@ Client-side SPA routing with params, guards, nested routes, file-based routing, 
 - [$route.matched](#routematched) -- explicit vs wildcard match detection
 - [Route Head Attributes](#route-head-attributes) -- page-title, page-description, page-canonical, page-jsonld on routes
 - [Accessibility -- focusBehavior](#accessibility--focusbehavior) -- automatic focus management
+- [Scroll Behavior](#scroll-behavior) -- scroll position after navigation
 - [Hash Mode Warning](#hash-mode-warning) -- SEO impact of hash URLs
 - [SPA Deployment Fallback](#spa-deployment-fallback) -- server configuration for history mode
 - [View Transition API](#view-transition-api) -- native route transitions
@@ -350,6 +351,20 @@ NoJS.config({ router: { focusBehavior: 'auto' } });
 ```
 
 When `'auto'`, focus moves to the first suitable target in this order: `[autofocus]` → `[tabindex="-1"]` → `h1` → outlet element. Default is `'none'` (no change to focus).
+
+### Scroll Behavior
+
+Control scroll position after route navigation:
+
+```javascript
+NoJS.config({ router: { scrollBehavior: 'top' } });
+```
+
+| Value | Description |
+|-------|-------------|
+| `"top"` | Scroll to top of page after navigation |
+| `"smooth"` | Smooth-scroll to top after navigation |
+| `"preserve"` | Keep current scroll position (no scroll change) |
 
 ### Hash Mode Warning
 
