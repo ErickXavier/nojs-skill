@@ -2,6 +2,44 @@
 
 The `NoJS` object is the single entry point to the framework's JavaScript API. When using the CDN (`<script src="https://cdn.no-js.dev/">`), it is available as `window.NoJS`. For ESM/CJS usage: `import NoJS from '@erickxavier/no-js'`.
 
+## Contents
+
+- [NoJS.config(options)](#nojsconfigoptions) — Global framework configuration
+- [NoJS.init(root?)](#nojsinitroot) — Initialize or re-initialize the framework
+- [NoJS.directive(name, handler)](#nojsdirectivename-handler) — Register custom directives
+- [NoJS.filter(name, fn)](#nojsfiltername-fn) — Register custom pipe filters
+- [NoJS.validator(name, fn)](#nojsvalidatorname-fn) — Register custom form validators
+- [NoJS.i18n(options)](#nojsi18noptions) — Configure internationalization
+- [NoJS.on(event, callback)](#nojsonevent-callback) — Subscribe to lifecycle events
+- [NoJS.use(plugin, options?)](#nojsuseplugin-options) — Install plugins
+- [NoJS.global(name, value)](#nojsglobalname-value) — Set global reactive variables
+- [NoJS.dispose()](#nojsdispose) — Tear down and clean up the framework
+- [NoJS.CANCEL](#nojscancel) — Cancel sentinel for interceptors
+- [NoJS.RESPOND](#nojsrespond) — Short-circuit response sentinel
+- [NoJS.REPLACE](#nojsreplace) — Replace request sentinel
+- [NoJS.interceptor(type, fn)](#nojsinterceptortype-fn) — Register request/response interceptors
+- [NoJS.store](#nojsstore) — Global reactive state store
+- [NoJS.notify()](#nojsnotify) — Trigger reactive re-evaluation
+- [NoJS.router](#nojsrouter) — Client-side router instance
+- [NoJS.locale](#nojslocale) — Current locale getter/setter
+- [NoJS.baseApiUrl](#nojsbaseapiurl) — Base URL for fetch directives
+- [NoJS.version](#nojsversion) — Framework version string
+- [Special Context Variables](#special-context-variables) — Built-in variables in expressions
+  - [Global](#global) — Framework-wide context variables
+  - [Events](#events) — Event handler context variables
+  - [Loops](#loops) — Iteration context variables
+  - [Forms](#forms) — Form-related context variables
+  - [Drag and Drop](#drag-and-drop) — Drag/drop context variables
+- [Security](#security) — XSS, CSP, and CSRF protections
+- [Web Components Compatibility](#web-components-compatibility) — Integration with custom elements
+- [Utility Functions](#utility-functions) — Low-level helper functions
+  - [NoJS.createContext(data?, parent?)](#nojscreatecontextdata-parent) — Create reactive context objects
+  - [NoJS.evaluate(expr, ctx)](#nojsevaluateexpr-ctx) — Evaluate expressions safely
+  - [NoJS.findContext(el)](#nojsfindcontextel) — Find context for a DOM element
+  - [NoJS.processTree(root)](#nojsprocesstreeroot) — Process directives on a DOM subtree
+  - [NoJS.resolve(path, ctx)](#nojsresolvepath-ctx) — Resolve dot-path on a context
+- [Complete Example](#complete-example) — Full working app demonstration
+
 ---
 
 ## NoJS.config(options)
