@@ -2,7 +2,7 @@
 name: nojs
 metadata:
   version: 1.11.1
-description: Expert-level knowledge of the No.JS HTML-first reactive framework for building dynamic web applications using only HTML attributes. Use this skill whenever the user mentions No.JS, NoJS, "no javascript framework", HTML-first framework, or is writing HTML with reactive attributes like bind, state, get, foreach, each, for, on:click, model, route, store, computed, watch, if/else, show/hide, validate, animate, drag, drop, t (i18n), class-*, style-*, or bind-*. Also use when the user asks about declarative HTML frameworks, zero-JS frameworks, or wants to build a web app without writing JavaScript. Even if the user doesn't mention No.JS by name, activate this skill when you see HTML attributes that match No.JS directive patterns.
+description: Provides expert-level knowledge of the No.JS HTML-first reactive framework for building dynamic web applications using only HTML attributes. Activates when the user mentions No.JS, NoJS, "no javascript framework", HTML-first framework, or is writing HTML with reactive attributes like bind, state, get, foreach, each, for, on:click, model, route, store, computed, watch, if/else, show/hide, validate, animate, drag, drop, t (i18n), class-*, style-*, or bind-*. Also relevant when the user asks about declarative HTML frameworks, zero-JS frameworks, or wants to build a web app without writing JavaScript. Applies whenever HTML attributes match No.JS directive patterns, even without explicit mention of the framework.
 ---
 
 # NoJS-Skill
@@ -25,13 +25,13 @@ No `app.mount()`, no `createApp()`, no build step. It just works.
 
 ## When to use
 
-Use this skill when:
+This skill applies when:
 
 - The user mentions **No.JS**, **NoJS**, or the **HTML-first reactive framework**
 - The user is writing HTML with No.JS directive attributes (`bind`, `state`, `get`, `foreach`, `each`, `for`, `on:click`, `model`, `route`, `store`, `validate`, `animate`, `drag`, `drop`, `t`, `class-*`, `style-*`, `bind-*`)
 - The user asks about **declarative HTML frameworks** or wants to build a **web app without writing JavaScript**
 - The user needs to **scaffold**, **validate**, or **debug** No.JS templates
-- You see HTML attributes that match No.JS directive patterns, even without explicit mention
+- HTML attributes match No.JS directive patterns, even without explicit mention of the framework
 
 ## Instructions
 
