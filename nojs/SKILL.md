@@ -56,11 +56,13 @@ No.JS works by walking the DOM on `DOMContentLoaded`, matching HTML attributes t
 | 1 | `get`, `post`, `put`, `patch`, `delete`, `error-boundary`, `i18n-ns`, `page-title`, `page-description`, `page-canonical`, `page-jsonld` | Fetch data, error/i18n setup, head management |
 | 2 | `computed`, `watch` | Derive values and observe changes |
 | 5 | `ref` | Element references |
-| 10 | `if`, `else-if`, `else`, `switch`, `foreach`, `each`, `for`, `use`, `drag-list` | Structural (add/remove DOM) |
-| 15 | `drag`, `drop` | Drag and drop setup |
-| 16 | `drag-multiple` | Multi-select drag |
+| 10 | `if`, `else-if`, `else`, `switch`, `foreach`, `each`, `for`, `use`, `drag-list`* | Structural (add/remove DOM) |
+| 15 | `drag`*, `drop`* | Drag and drop setup |
+| 16 | `drag-multiple`* | Multi-select drag |
 | 20 | `bind`, `bind-*`, `bind-html`, `model`, `class-*`, `style-*`, `on:*`, `show`, `hide`, `t`, `call`, `trigger` | Rendering, events, i18n, actions |
-| 30 | `validate` | Form validation side effects |
+| 30 | `validate`* | Form validation side effects |
+
+> \* As of v1.13.0, `drag`, `drop`, `drag-list`, `drag-multiple`, and `validate` require the `@erickxavier/nojs-elements` plugin. Install it and call `NoJS.use(NoJSElements)` to enable them. The `error-boundary` directive and `NoJS.validator()` remain in core.
 
 Data lives in Proxy-backed reactive contexts that inherit from parent elements (like lexical scoping). When data changes, every bound element updates automatically.
 
@@ -78,11 +80,11 @@ Directives are organized into eight categories. Each summary below provides enou
 
 **Routing** -- `<a route>`, `<template route>`, `<main route-view>`. View Transition API with presets (`slide`, `fade`, `scale`, `none`). Guards, named outlets, `$route` context, file-based routing, head attributes. See [references/directives/routing.md](references/directives/routing.md).
 
-**Forms** -- `<form validate>` with `$form` context. Field rules: `validate="required,email,min:5"`. Triggers: `validate-on`. Conditional: `validate-if`. Custom validators via `NoJS.validator()`. See [references/directives/forms.md](references/directives/forms.md).
+**Forms** -- `<form validate>` with `$form` context (requires Elements plugin since v1.13.0). Field rules: `validate="required,email,min:5"`. Triggers: `validate-on`. Conditional: `validate-if`. Custom validators via `NoJS.validator()` (remains in core). See [references/directives/forms.md](references/directives/forms.md).
 
 **Templates** -- `<template id>` + `use`, `<slot>`, `<template src>` (remote loading), `include`, lazy loading (`lazy`, `lazy="priority"`, `lazy="ondemand"`). See [references/directives/templates.md](references/directives/templates.md).
 
-**Extras** -- Animations (`animate`, `transition`, `animate-stagger`), i18n (`t`, `i18n-ns`, pluralization), DnD (`drag`, `drop`, `drag-list`, `drag-multiple`), head management (`page-title`, `page-description`, `page-canonical`, `page-jsonld`), refs (`ref`, `call`, `trigger`), styling (`class-*`, `style-*`), error boundaries. See [references/directives/extras.md](references/directives/extras.md).
+**Extras** -- Animations (`animate`, `transition`, `animate-stagger`), i18n (`t`, `i18n-ns`, pluralization), DnD (`drag`, `drop`, `drag-list`, `drag-multiple` -- requires Elements plugin since v1.13.0), head management (`page-title`, `page-description`, `page-canonical`, `page-jsonld`), refs (`ref`, `call`, `trigger`), styling (`class-*`, `style-*`), error boundaries. See [references/directives/extras.md](references/directives/extras.md).
 
 ### 3. Use the expression syntax correctly
 
