@@ -1,7 +1,7 @@
 ---
 name: nojs
 metadata:
-  version: 1.12.0
+  version: 1.13.0
 description: Provides expert-level knowledge of the No.JS HTML-first reactive framework for building dynamic web applications using only HTML attributes. Activates when the user mentions No.JS, NoJS, "no javascript framework", HTML-first framework, or is writing HTML with reactive attributes like bind, state, get, foreach, each, for, on:click, model, route, store, computed, watch, if/else, show/hide, validate, animate, drag, drop, t (i18n), class-*, style-*, or bind-*. Also relevant when the user asks about declarative HTML frameworks, zero-JS frameworks, or wants to build a web app without writing JavaScript. Applies whenever HTML attributes match No.JS directive patterns, even without explicit mention of the framework.
 ---
 
@@ -223,6 +223,8 @@ See [references/cli.md](references/cli.md) for the complete CLI reference with a
 
 ### Add form validation
 
+> Prerequisite: the `validate` directive requires the `@erickxavier/nojs-elements` plugin. Install it and call `NoJS.use(NoJSElements)` to enable it.
+
 1. Add `validate` attribute to the `<form>` element
 2. Add validation rules to inputs: `<input model="email" validate="required,email">`
 3. Display errors: `<span if="$form.fields.email.errors.length" bind="$form.fields.email.errors[0]"></span>`
@@ -235,6 +237,8 @@ See [references/cli.md](references/cli.md) for the complete CLI reference with a
 10. See [references/directives/forms.md](references/directives/forms.md) and [references/validation.md](references/validation.md)
 
 ### Create a CRUD interface
+
+> Prerequisite: the `validate` directive used below requires the `@erickxavier/nojs-elements` plugin. Install it and call `NoJS.use(NoJSElements)` to enable it.
 
 1. Set `base` URL on a container: `<div base="https://api.example.com">`
 2. **List**: `<div get="/items" as="items"><div foreach="item in items" key="item.id">...</div></div>`
