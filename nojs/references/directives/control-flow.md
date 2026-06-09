@@ -267,7 +267,7 @@ The `in` keyword separates the loop variable from the source array expression. T
 | `foreach` | `"variable in arrayExpression"` |
 | `index` | Variable name for the index (default: `$index`) |
 | `key` | Unique key expression for DOM diffing |
-| `else` | Template ID to render when array is empty (companion attribute) |
+| `else` | Template ID or `#id` reference to render when array is empty (companion attribute) |
 | `template` | Template ID to clone for each iteration |
 | `filter` | Expression to filter items |
 | `sort` | Property path to sort by (prefix with `-` for descending) |
@@ -438,13 +438,20 @@ Child loops can access parent scope variables. Each loop element is self-repeati
 
 When a loop's source array is empty, null, or undefined, an `else` fallback is displayed. There are two patterns:
 
-**1. Companion attribute** -- `else="templateId"` on the loop element references a `<template>` for the fallback:
+**1. Companion attribute** -- `else="templateId"` or `else="#templateId"` on the loop element references a `<template>` to show when the array is empty, null, or undefined. Both bare ID and `#id` syntax are accepted:
 
 ```html
+<!-- Bare ID syntax -->
 <li each="item in items" key="item.id" else="noItemsTpl" bind="item.name"></li>
 <template id="noItemsTpl">
   <li class="empty-state">No items match your criteria.</li>
 </template>
+
+<!-- #id syntax -->
+<article foreach="item in items" else="#no-items">
+  <h2 bind="item.title"></h2>
+</article>
+<template id="no-items"><span>No items found</span></template>
 ```
 
 **2. Sibling element** -- a separate element with `else` placed immediately after the loop element provides inline fallback content:
