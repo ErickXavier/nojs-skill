@@ -897,7 +897,7 @@ URL resolution walks up the ancestor chain until it finds an element with a `bas
 Read-only string containing the current No.JS version.
 
 ```javascript
-console.log(NoJS.version); // "1.10.0"
+console.log(NoJS.version); // "1.14.0"
 ```
 
 ```html
