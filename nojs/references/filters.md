@@ -57,13 +57,13 @@ Filters are applied with `|` inside expressions:
 <span bind="name | trim | uppercase"></span>
 
 <!-- Filter with argument -->
-<span bind="description | truncate(50)"></span>
+<span bind="description | truncate:50"></span>
 
 <!-- Filter with multiple arguments -->
-<span bind="items | where('active', true) | count"></span>
+<span bind="items | where:'active',true | count"></span>
 ```
 
-Arguments are passed with parentheses or colon syntax: `filter(arg)` or `filter:arg`.
+Arguments are passed with colon syntax: `filter:arg`.
 
 ---
 
@@ -117,11 +117,11 @@ Truncate a string to N characters and append an ellipsis.
 
 | | |
 |---|---|
-| **Syntax** | `value | truncate(length)` |
+| **Syntax** | `value | truncate:length` |
 | **Arguments** | `length` (number, default: 100) -- max characters before truncation |
 
 ```html
-<p bind="description | truncate(50)"></p>
+<p bind="description | truncate:50"></p>
 <!-- "This is a very long description..." (truncated at 50 chars) -->
 ```
 
@@ -206,11 +206,11 @@ Format a number with locale-aware thousand separators and decimal places.
 
 | | |
 |---|---|
-| **Syntax** | `value | number(decimals)` |
+| **Syntax** | `value | number:decimals` |
 | **Arguments** | `decimals` (number, default: 0) -- number of decimal places |
 
 ```html
-<span bind="total | number(2)"></span>
+<span bind="total | number:2"></span>
 <!-- 1234.5 -> "1,234.50" -->
 
 <span bind="count | number"></span>
@@ -223,14 +223,14 @@ Format a number as currency using the browser locale.
 
 | | |
 |---|---|
-| **Syntax** | `value | currency(code)` |
+| **Syntax** | `value | currency:code` |
 | **Arguments** | `code` (string, default: "USD") -- ISO 4217 currency code |
 
 ```html
 <span bind="price | currency"></span>
 <!-- 29.99 -> "$29.99" -->
 
-<span bind="price | currency('EUR')"></span>
+<span bind="price | currency:'EUR'"></span>
 <!-- 29.99 -> "29,99 EUR" (varies by locale) -->
 ```
 
@@ -240,11 +240,11 @@ Format a number as a percentage (multiplies by 100).
 
 | | |
 |---|---|
-| **Syntax** | `value | percent(decimals)` |
+| **Syntax** | `value | percent:decimals` |
 | **Arguments** | `decimals` (number, default: 0) -- decimal places |
 
 ```html
-<span bind="rate | percent(1)"></span>
+<span bind="rate | percent:1"></span>
 <!-- 0.856 -> "85.6%" -->
 
 <span bind="progress | percent"></span>
@@ -333,14 +333,14 @@ Join array elements into a string with a separator.
 
 | | |
 |---|---|
-| **Syntax** | `array | join(separator)` |
+| **Syntax** | `array | join:separator` |
 | **Arguments** | `separator` (string, default: ", ") |
 
 ```html
-<span bind="tags | join(', ')"></span>
+<span bind="tags | join:', '"></span>
 <!-- ["html", "css", "js"] -> "html, css, js" -->
 
-<span bind="parts | join(' - ')"></span>
+<span bind="parts | join:' - '"></span>
 <!-- ["a", "b", "c"] -> "a - b - c" -->
 ```
 
@@ -369,7 +369,7 @@ Remove duplicate values from an array. Returns a new array.
 | **Arguments** | None |
 
 ```html
-<span bind="categories | unique | join(', ')"></span>
+<span bind="categories | unique | join:', '"></span>
 <!-- ["a", "b", "a", "c", "b"] -> "a, b, c" -->
 ```
 
@@ -379,11 +379,11 @@ Extract a single property from each object in an array.
 
 | | |
 |---|---|
-| **Syntax** | `array | pluck(property)` |
+| **Syntax** | `array | pluck:property` |
 | **Arguments** | `property` (string) -- the property name to extract |
 
 ```html
-<span bind="users | pluck('name') | join(', ')"></span>
+<span bind="users | pluck:'name' | join:', '"></span>
 <!-- [{name:"Alice"}, {name:"Bob"}] -> "Alice, Bob" -->
 ```
 
@@ -393,17 +393,17 @@ Sort an array of objects by a property. Prefix the property name with `-` for de
 
 | | |
 |---|---|
-| **Syntax** | `array | sortBy(property)` |
+| **Syntax** | `array | sortBy:property` |
 | **Arguments** | `property` (string) -- property name; prefix with `-` for descending |
 
 ```html
 <!-- Ascending -->
-<div each="user in users | sortBy('name')">
+<div each="user in users | sortBy:'name'">
   <span bind="user.name"></span>
 </div>
 
 <!-- Descending -->
-<div each="post in posts | sortBy('-date')">
+<div each="post in posts | sortBy:'-date'">
   <span bind="post.title"></span>
 </div>
 ```
@@ -414,15 +414,15 @@ Filter an array to only include objects where a property matches a value.
 
 | | |
 |---|---|
-| **Syntax** | `array | where(property, value)` |
+| **Syntax** | `array | where:property,value` |
 | **Arguments** | `property` (string), `value` (any) -- the property and value to match |
 
 ```html
-<div each="user in users | where('active', true)">
+<div each="user in users | where:'active',true">
   <span bind="user.name"></span>
 </div>
 
-<span bind="tasks | where('status', 'done') | count"></span>
+<span bind="tasks | where:'status','done' | count"></span>
 ```
 
 ---
@@ -435,17 +435,17 @@ Format a date value. Accepts format presets: `"short"`, `"long"`, or `"full"`.
 
 | | |
 |---|---|
-| **Syntax** | `value | date(format)` |
+| **Syntax** | `value | date:format` |
 | **Arguments** | `format` (string, default: "short") -- `"short"`, `"long"`, or `"full"` |
 
 ```html
 <span bind="createdAt | date"></span>
 <!-- "2025-03-15" -> "3/15/25" (short, varies by locale) -->
 
-<span bind="createdAt | date('long')"></span>
+<span bind="createdAt | date:'long'"></span>
 <!-- "2025-03-15" -> "March 15, 2025" -->
 
-<span bind="createdAt | date('full')"></span>
+<span bind="createdAt | date:'full'"></span>
 <!-- "2025-03-15" -> "Saturday, March 15, 2025" -->
 ```
 
@@ -508,11 +508,11 @@ Provide a fallback value when the input is `null`, `undefined`, or an empty stri
 
 | | |
 |---|---|
-| **Syntax** | `value | default(fallback)` |
+| **Syntax** | `value | default:fallback` |
 | **Arguments** | `fallback` (any, default: "") -- the value to use as fallback |
 
 ```html
-<span bind="user.nickname | default('Anonymous')"></span>
+<span bind="user.nickname | default:'Anonymous'"></span>
 <!-- null -> "Anonymous" -->
 <!-- "" -> "Anonymous" -->
 <!-- "John" -> "John" -->
@@ -524,14 +524,14 @@ Pretty-print a value as formatted JSON.
 
 | | |
 |---|---|
-| **Syntax** | `value | json(indent)` |
+| **Syntax** | `value | json:indent` |
 | **Arguments** | `indent` (number, default: 2) -- spaces for indentation |
 
 ```html
 <pre bind="data | json"></pre>
 <!-- { name: "John", age: 30 } -> '{\n  "name": "John",\n  "age": 30\n}' -->
 
-<pre bind="data | json(4)"></pre>
+<pre bind="data | json:4"></pre>
 <!-- 4-space indentation -->
 ```
 
@@ -549,7 +549,7 @@ Log the value to the browser console and pass it through unchanged. Useful for d
 <span bind="items | debug | count"></span>
 
 <!-- Inspect intermediate values in a chain -->
-<span bind="users | where('active', true) | debug | pluck('name') | join(', ')"></span>
+<span bind="users | where:'active',true | debug | pluck:'name' | join:', '"></span>
 ```
 
 ### keys
@@ -562,7 +562,7 @@ Return the keys of an object as an array.
 | **Arguments** | None |
 
 ```html
-<span bind="config | keys | join(', ')"></span>
+<span bind="config | keys | join:', '"></span>
 <!-- { name: "a", color: "red" } -> "name, color" -->
 
 <span bind="data | keys | count"></span>
@@ -579,7 +579,7 @@ Return the values of an object as an array.
 | **Arguments** | None |
 
 ```html
-<span bind="scores | values | join(', ')"></span>
+<span bind="scores | values | join:', '"></span>
 <!-- { math: 90, eng: 85 } -> "90, 85" -->
 ```
 
@@ -608,10 +608,10 @@ Register custom filters with `NoJS.filter(name, fn)`. The function receives the 
 <span bind="fullName | initials"></span>
 <!-- "John Doe" -> "JD" -->
 
-<span bind="price | multiply(1.1) | currency"></span>
+<span bind="price | multiply:1.1 | currency"></span>
 <!-- 100 -> "$110.00" -->
 
-<span bind="name | wrap('[', ']')"></span>
+<span bind="name | wrap:'[',']'"></span>
 <!-- "test" -> "[test]" -->
 ```
 
@@ -621,14 +621,14 @@ Filters can be combined to build powerful display transformations:
 
 ```html
 <!-- Format a user list -->
-<span bind="users | where('active', true) | pluck('name') | sortBy('name') | join(', ')"></span>
+<span bind="users | where:'active',true | pluck:'name' | sortBy:'name' | join:', '"></span>
 
 <!-- Safe truncated display -->
-<p bind="content | stripHtml | trim | truncate(200)"></p>
+<p bind="content | stripHtml | trim | truncate:200"></p>
 
 <!-- Number with fallback -->
-<span bind="score | number(1) | default('N/A')"></span>
+<span bind="score | number:1 | default:'N/A'"></span>
 
 <!-- Debug a filter chain -->
-<span bind="data | debug | where('type', 'a') | debug | count"></span>
+<span bind="data | debug | where:'type','a' | debug | count"></span>
 ```
