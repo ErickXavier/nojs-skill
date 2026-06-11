@@ -58,7 +58,7 @@ No.JS works by walking the DOM on `DOMContentLoaded`, matching HTML attributes t
 | 2 | `computed`, `watch` | Derive values and observe changes |
 | 5 | `ref` | Element references |
 | 10 | `if`, `else-if`, `else`, `switch`, `foreach`, `each`, `for`, `use`, `drag-list`* | Structural (add/remove DOM) |
-| 15 | `drag`*, `drop`* | Drag and drop setup |
+| 15 | `animate`, `drag`*, `drop`* | Animation and drag-and-drop setup |
 | 16 | `drag-multiple`* | Multi-select drag |
 | 20 | `bind`, `bind-*`, `bind-html`, `model`, `class-*`, `style-*`, `on:*`, `show`, `hide`, `t`, `call`, `trigger` | Rendering, events, i18n, actions |
 | 30 | `validate`* | Form validation side effects |
@@ -75,7 +75,7 @@ Directives are organized into eight categories. Each summary below provides enou
 
 **State and Binding** -- `state` (local), `store` (global via `$store`), `computed`, `watch`, `persist`/`persist-key`/`persist-fields`. Binding: `bind` (text), `bind-html` (sanitized), `bind-*` (attributes), `model` (two-way). See [references/directives/state-and-binding.md](references/directives/state-and-binding.md).
 
-**Control Flow** -- `if`/`else-if`/`else`, `show`/`hide` (CSS toggle), `switch`/`case`/`default`. Loops: `foreach`/`each`/`for` (aliases, same handler) -- self-repeating pattern where the element with the directive IS the repeating template (removed from DOM, clones inserted as siblings between comment markers). Companion attributes: `filter`, `sort`, `limit`, `offset`, `key`, `template`, `index`, `else`. Empty-list fallback via companion `else="templateId"` attribute -- renders when the list is empty or null/undefined/non-array (sibling else pattern removed in v1.15). Loop vars: `$index`, `$count`, `$first`, `$last`, `$even`, `$odd`. See [references/directives/control-flow.md](references/directives/control-flow.md).
+**Control Flow** -- `if`/`else-if`/`else`, `show`/`hide` (CSS toggle), `switch`/`case`/`default`. Loops: `foreach`/`each`/`for` (aliases, same handler) -- self-repeating pattern where the element with the directive IS the repeating template (removed from DOM, clones inserted as siblings between comment markers). Companion attributes: `filter`, `sort`, `limit`, `offset`, `key`, `template`, `index`, `else`. Empty-list fallback via companion `else="templateId"` attribute -- renders when the list is empty or null/undefined/non-array (sibling else pattern removed — Unreleased). Loop vars: `$index`, `$count`, `$first`, `$last`, `$even`, `$odd`. See [references/directives/control-flow.md](references/directives/control-flow.md).
 
 **Events** -- `on:click="expr"` with modifiers (`.prevent`, `.stop`, `.once`, `.debounce.300`, `.throttle.100`). Key mods, lifecycle hooks (`on:init`, `on:mounted`, `on:updated`, `on:unmounted`, `on:error`). Vars: `$event`, `$el`. See [references/directives/events.md](references/directives/events.md).
 
@@ -97,6 +97,7 @@ Expressions support JavaScript-like syntax against the reactive context:
 - Increment/decrement: `count++`, `count--`, `++count`, `--count`
 - Multi-statement: semicolon-separated statements in event handlers: `on:click="count++; name = 'updated'; validate()"`
 - Function calls: `items.push(newItem)`
+- **Context limitation**: Filters/pipes work only in expression context (`bind`, `class-*`, `style-*`, ternaries, etc.), not in `on:*`/`watch` statement handlers. Likewise, `if`/`new` statements are unsupported in the evaluator -- use ternary expressions or multi-statement assignment chains instead
 - **Statement write-back**: In event handlers (`on:*`, `watch`), mutated context variables are automatically written back to the owning context in the scope chain after execution. New variables created during execution are persisted to the context via `$set`
 - **Caching**: Expression and statement ASTs are cached using LRU eviction (configurable via `exprCacheSize`, default 500)
 - The evaluator uses an allow-list approach: `_SAFE_GLOBALS` for JS built-ins and `_BROWSER_GLOBALS` for curated browser APIs. `fetch`, `XMLHttpRequest`, `localStorage`, `sessionStorage`, `WebSocket`, and `indexedDB` are NOT on the allow-list. Spread operations filter `_FORBIDDEN_PROPS` (`__proto__`, `constructor`, `prototype`)
@@ -129,7 +130,7 @@ NoJS.store                 // Access global stores
 NoJS.notify()              // Trigger UI update after external mutation
 NoJS.router                // push(), replace(), back(), forward()
 NoJS.locale = 'pt'         // Get/set locale
-NoJS.version               // "1.11.1"
+NoJS.version               // "1.14.0"
 NoJS.CANCEL                // Symbol sentinel: cancel request in interceptor
 NoJS.RESPOND               // Symbol sentinel: short-circuit with mock response
 NoJS.REPLACE               // Symbol sentinel: replace response data
@@ -146,7 +147,7 @@ See [references/api.md](references/api.md) for the complete API reference. See [
 5. **Scope state close to usage** -- put `state` on the nearest common ancestor
 6. **Use `$store` for cross-component data** -- auth, theme, cart, notifications
 7. **Add `key` on loops** -- `each="item in items" key="item.id"` for efficient updates
-8. **Use `else="templateId"` for empty lists** -- `<li each="item in items" else="noItemsTpl"></li>` with a `<template id="noItemsTpl">` for empty-state content; the template renders when the list is empty or null/undefined/non-array (sibling else pattern removed in v1.15)
+8. **Use `else="templateId"` for empty lists** -- `<li each="item in items" else="noItemsTpl"></li>` with a `<template id="noItemsTpl">` for empty-state content; the template renders when the list is empty or null/undefined/non-array (sibling else pattern removed — Unreleased)
 9. **Use filters for display** -- `bind="price | currency"` not inline formatting
 10. **Events use colon syntax** -- `on:click` not `onclick` or `on-click`
 11. **Validate forms declaratively** -- `<form validate>` + `validate="required,email"` on inputs
