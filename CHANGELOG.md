@@ -5,6 +5,14 @@ All notable changes to the **NoJS Skill** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased](https://github.com/ErickXavier/nojs-skill/compare/v1.14.0...HEAD)
+
+### Changed
+
+- **BREAKING (Core v1.15 sync):** removed all sibling-`else` loop teaching from SKILL.md and control-flow.md; loops document only the `else="templateId"` companion attribute
+- Documented new `else` semantics: the else template renders when the list is empty (`[]`) or null/undefined/non-array
+- Added orphan-`else` console warning entry to the troubleshooting reference
+
 ## [1.14.0](https://github.com/ErickXavier/nojs-skill/compare/v1.13.3...v1.14.0) — 2026-06-09
 
 ### Added
