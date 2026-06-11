@@ -154,7 +154,7 @@ Complete, copy-paste-ready templates and patterns for building applications with
     <div each="item in result.data" key="item.id"
          animate="fadeIn" animate-stagger="50">
       <h3 bind="item.title"></h3>
-      <p bind="item.description | truncate(100)"></p>
+      <p bind="item.description | truncate:100"></p>
       <span bind="item.createdAt | relative"></span>
     </div>
 
@@ -545,7 +545,7 @@ Complete, copy-paste-ready templates and patterns for building applications with
        animate="fadeIn" animate-stagger="30">
     <div class="feed-item">
       <h3 bind="item.title"></h3>
-      <p bind="item.excerpt | truncate(150)"></p>
+      <p bind="item.excerpt | truncate:150"></p>
       <span bind="item.date | relative"></span>
     </div>
   </div>
@@ -742,7 +742,7 @@ Complete, copy-paste-ready templates and patterns for building applications with
     <div each="item in results" key="item.id"
          animate="fadeIn" animate-stagger="30">
       <a bind-href="'/items/' + item.id" bind="item.title"></a>
-      <p bind="item.snippet | truncate(80)"></p>
+      <p bind="item.snippet | truncate:80"></p>
     </div>
 
     <p if="results.length === 0">No results for "<span bind="query"></span>"</p>
