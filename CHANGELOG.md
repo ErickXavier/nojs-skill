@@ -5,13 +5,27 @@ All notable changes to the **NoJS Skill** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/ErickXavier/nojs-skill/compare/v1.14.0...HEAD)
+## [Unreleased](https://github.com/ErickXavier/nojs-skill/compare/v1.14.1...HEAD)
 
 ### Changed
 
 - **BREAKING (Core v1.15 sync):** removed all sibling-`else` loop teaching from SKILL.md and control-flow.md; loops document only the `else="templateId"` companion attribute
 - Documented new `else` semantics: the else template renders when the list is empty (`[]`) or null/undefined/non-array
 - Added orphan-`else` console warning entry to the troubleshooting reference
+
+## [1.14.1](https://github.com/ErickXavier/nojs-skill/compare/v1.14.0...v1.14.1) — 2026-06-11
+
+### Fixed
+
+- Replaced all 46 paren-style filter examples with colon syntax (filters.md, patterns.md)
+- Replaced evaluator-unsafe examples (IntersectionObserver → native pagination, new Event → trigger directive)
+- Fixed `on:keydown.ctrl.s` → `on:keydown.ctrl.enter` in events/validation docs
+- Clarified `.backspace` vs `.delete` key modifier behavior
+- Corrected "unknown modifiers trigger a warning" → "silently ignored by runtime"
+- Added filters/evaluator context limitation caveat to SKILL.md
+- Added `animate` to priority-15 row in directive table
+- Updated version strings from 1.11.1/1.10.0 to 1.14.0
+- Changed "removed in v1.15" to "removed — Unreleased" for sibling else pattern
 
 ## [1.14.0](https://github.com/ErickXavier/nojs-skill/compare/v1.13.3...v1.14.0) — 2026-06-09
 
