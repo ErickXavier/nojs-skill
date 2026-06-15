@@ -1168,11 +1168,13 @@ Fall back to legacy class-based transitions:
 ### State Scoping: Local vs Global
 
 **Use `state` (local)** for UI-only concerns:
+
 - Form field values
 - Toggle states (expanded, visible, active tab)
 - Temporary data that does not need to survive navigation
 
 **Use `store` (global)** for cross-component, cross-route data:
+
 - Auth/user session
 - Shopping cart
 - Theme/locale preferences
@@ -1198,7 +1200,7 @@ Fall back to legacy class-based transitions:
 
 Use file-based routing with remote templates to keep things modular:
 
-```
+```text
 project/
   index.html
   components/

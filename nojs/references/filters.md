@@ -75,7 +75,7 @@ Convert a string to uppercase.
 
 | | |
 |---|---|
-| **Syntax** | `value | uppercase` |
+| **Syntax** | `value \| uppercase` |
 | **Arguments** | None |
 
 ```html
@@ -89,7 +89,7 @@ Convert a string to lowercase.
 
 | | |
 |---|---|
-| **Syntax** | `value | lowercase` |
+| **Syntax** | `value \| lowercase` |
 | **Arguments** | None |
 
 ```html
@@ -103,7 +103,7 @@ Capitalize the first letter of each word.
 
 | | |
 |---|---|
-| **Syntax** | `value | capitalize` |
+| **Syntax** | `value \| capitalize` |
 | **Arguments** | None |
 
 ```html
@@ -117,7 +117,7 @@ Truncate a string to N characters and append an ellipsis.
 
 | | |
 |---|---|
-| **Syntax** | `value | truncate:length` |
+| **Syntax** | `value \| truncate:length` |
 | **Arguments** | `length` (number, default: 100) -- max characters before truncation |
 
 ```html
@@ -131,7 +131,7 @@ Remove whitespace from both ends of a string.
 
 | | |
 |---|---|
-| **Syntax** | `value | trim` |
+| **Syntax** | `value \| trim` |
 | **Arguments** | None |
 
 ```html
@@ -145,7 +145,7 @@ Remove all HTML tags from a string.
 
 | | |
 |---|---|
-| **Syntax** | `value | stripHtml` |
+| **Syntax** | `value \| stripHtml` |
 | **Arguments** | None |
 
 ```html
@@ -159,7 +159,7 @@ Convert a string to a URL-friendly slug.
 
 | | |
 |---|---|
-| **Syntax** | `value | slugify` |
+| **Syntax** | `value \| slugify` |
 | **Arguments** | None |
 
 ```html
@@ -173,7 +173,7 @@ Convert newline characters to `<br>` tags. Before converting newlines, the filte
 
 | | |
 |---|---|
-| **Syntax** | `value | nl2br` |
+| **Syntax** | `value \| nl2br` |
 | **Arguments** | None |
 
 ```html
@@ -188,7 +188,7 @@ URL-encode a string using `encodeURIComponent`.
 
 | | |
 |---|---|
-| **Syntax** | `value | encodeUri` |
+| **Syntax** | `value \| encodeUri` |
 | **Arguments** | None |
 
 ```html
@@ -206,7 +206,7 @@ Format a number with locale-aware thousand separators and decimal places.
 
 | | |
 |---|---|
-| **Syntax** | `value | number:decimals` |
+| **Syntax** | `value \| number:decimals` |
 | **Arguments** | `decimals` (number, default: 0) -- number of decimal places |
 
 ```html
@@ -223,7 +223,7 @@ Format a number as currency using the browser locale.
 
 | | |
 |---|---|
-| **Syntax** | `value | currency:code` |
+| **Syntax** | `value \| currency:code` |
 | **Arguments** | `code` (string, default: "USD") -- ISO 4217 currency code |
 
 ```html
@@ -240,7 +240,7 @@ Format a number as a percentage (multiplies by 100).
 
 | | |
 |---|---|
-| **Syntax** | `value | percent:decimals` |
+| **Syntax** | `value \| percent:decimals` |
 | **Arguments** | `decimals` (number, default: 0) -- decimal places |
 
 ```html
@@ -257,7 +257,7 @@ Format a byte count as a human-readable file size.
 
 | | |
 |---|---|
-| **Syntax** | `value | filesize` |
+| **Syntax** | `value \| filesize` |
 | **Arguments** | None |
 
 ```html
@@ -273,7 +273,7 @@ Add an ordinal suffix (st, nd, rd, th) to a number.
 
 | | |
 |---|---|
-| **Syntax** | `value | ordinal` |
+| **Syntax** | `value \| ordinal` |
 | **Arguments** | None |
 
 ```html
@@ -291,7 +291,7 @@ Return the length of an array.
 
 | | |
 |---|---|
-| **Syntax** | `array | count` |
+| **Syntax** | `array \| count` |
 | **Arguments** | None |
 
 ```html
@@ -305,7 +305,7 @@ Return the first element of an array.
 
 | | |
 |---|---|
-| **Syntax** | `array | first` |
+| **Syntax** | `array \| first` |
 | **Arguments** | None |
 
 ```html
@@ -319,7 +319,7 @@ Return the last element of an array.
 
 | | |
 |---|---|
-| **Syntax** | `array | last` |
+| **Syntax** | `array \| last` |
 | **Arguments** | None |
 
 ```html
@@ -333,7 +333,7 @@ Join array elements into a string with a separator.
 
 | | |
 |---|---|
-| **Syntax** | `array | join:separator` |
+| **Syntax** | `array \| join:separator` |
 | **Arguments** | `separator` (string, default: ", ") |
 
 ```html
@@ -350,7 +350,7 @@ Reverse the order of array elements. Returns a new array (non-mutating).
 
 | | |
 |---|---|
-| **Syntax** | `array | reverse` |
+| **Syntax** | `array \| reverse` |
 | **Arguments** | None |
 
 ```html
@@ -365,7 +365,7 @@ Remove duplicate values from an array. Returns a new array.
 
 | | |
 |---|---|
-| **Syntax** | `array | unique` |
+| **Syntax** | `array \| unique` |
 | **Arguments** | None |
 
 ```html
@@ -379,7 +379,7 @@ Extract a single property from each object in an array.
 
 | | |
 |---|---|
-| **Syntax** | `array | pluck:property` |
+| **Syntax** | `array \| pluck:property` |
 | **Arguments** | `property` (string) -- the property name to extract |
 
 ```html
@@ -393,7 +393,7 @@ Sort an array of objects by a property. Prefix the property name with `-` for de
 
 | | |
 |---|---|
-| **Syntax** | `array | sortBy:property` |
+| **Syntax** | `array \| sortBy:property` |
 | **Arguments** | `property` (string) -- property name; prefix with `-` for descending |
 
 ```html
@@ -414,7 +414,7 @@ Filter an array to only include objects where a property matches a value.
 
 | | |
 |---|---|
-| **Syntax** | `array | where:property,value` |
+| **Syntax** | `array \| where:property,value` |
 | **Arguments** | `property` (string), `value` (any) -- the property and value to match |
 
 ```html
@@ -435,7 +435,7 @@ Format a date value. Accepts format presets: `"short"`, `"long"`, or `"full"`.
 
 | | |
 |---|---|
-| **Syntax** | `value | date:format` |
+| **Syntax** | `value \| date:format` |
 | **Arguments** | `format` (string, default: "short") -- `"short"`, `"long"`, or `"full"` |
 
 ```html
@@ -455,7 +455,7 @@ Format a value as both date and time using the browser locale.
 
 | | |
 |---|---|
-| **Syntax** | `value | datetime` |
+| **Syntax** | `value \| datetime` |
 | **Arguments** | None |
 
 ```html
@@ -469,7 +469,7 @@ Display a past date as relative time (e.g., "5m ago", "2h ago"). Falls back to a
 
 | | |
 |---|---|
-| **Syntax** | `value | relative` |
+| **Syntax** | `value \| relative` |
 | **Arguments** | None |
 
 ```html
@@ -487,7 +487,7 @@ Display a future date as relative time (e.g., "in 3h", "in 5d"). Falls back to `
 
 | | |
 |---|---|
-| **Syntax** | `value | fromNow` |
+| **Syntax** | `value \| fromNow` |
 | **Arguments** | None |
 
 ```html
@@ -508,7 +508,7 @@ Provide a fallback value when the input is `null`, `undefined`, or an empty stri
 
 | | |
 |---|---|
-| **Syntax** | `value | default:fallback` |
+| **Syntax** | `value \| default:fallback` |
 | **Arguments** | `fallback` (any, default: "") -- the value to use as fallback |
 
 ```html
@@ -524,7 +524,7 @@ Pretty-print a value as formatted JSON.
 
 | | |
 |---|---|
-| **Syntax** | `value | json:indent` |
+| **Syntax** | `value \| json:indent` |
 | **Arguments** | `indent` (number, default: 2) -- spaces for indentation |
 
 ```html
@@ -541,7 +541,7 @@ Log the value to the browser console and pass it through unchanged. Useful for d
 
 | | |
 |---|---|
-| **Syntax** | `value | debug` |
+| **Syntax** | `value \| debug` |
 | **Arguments** | None |
 
 ```html
@@ -558,7 +558,7 @@ Return the keys of an object as an array.
 
 | | |
 |---|---|
-| **Syntax** | `value | keys` |
+| **Syntax** | `value \| keys` |
 | **Arguments** | None |
 
 ```html
@@ -575,7 +575,7 @@ Return the values of an object as an array.
 
 | | |
 |---|---|
-| **Syntax** | `value | values` |
+| **Syntax** | `value \| values` |
 | **Arguments** | None |
 
 ```html

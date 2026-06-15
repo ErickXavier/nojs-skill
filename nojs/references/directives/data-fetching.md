@@ -318,11 +318,13 @@ The method is available on all directives (`get`, `post`, `put`, `patch`, `delet
 The variable name exposed inside `success` and `error` templates follows a priority chain:
 
 **Success template:**
+
 1. The `<template>` element's own `var` attribute (highest priority)
 2. The directive element's `var` attribute
 3. Falls back to `"result"`
 
 **Error template:**
+
 1. The `<template>` element's own `var` attribute (highest priority)
 2. Falls back to `"err"`
 
@@ -438,6 +440,7 @@ Cursor-based pagination. Mutually exclusive with `get-page`.
 The cursor value is extracted from each response and used in the next request. The `{cursor}` token in the URL resolves to the current cursor. Initially empty string (first request has no cursor).
 
 **Cursor extraction order:**
+
 1. Custom field via `get-cursor-field` (supports dot notation)
 2. Response header `X-Cursor`
 3. Auto-detect from common JSON field names: `nextCursor`, `next_cursor`, `cursor`, `nextPageToken`, `next_page_token`, `pageToken`, `after`, `endCursor`, `end_cursor`

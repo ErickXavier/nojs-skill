@@ -94,11 +94,13 @@ The `foreach`, `each`, and `for` directives all use the format `"item in items"`
 The `model` directive creates two-way data binding and is designed for interactive form elements. Using it on non-input elements produces a warning.
 
 **Valid elements for `model`:**
+
 - `<input>` (text, email, password, number, checkbox, radio, etc.)
 - `<select>`
 - `<textarea>`
 
 **Invalid elements (triggers warning):**
+
 - `<div>`, `<span>`, `<p>`, `<h1>`-`<h6>`
 - `<section>`, `<article>`, `<main>`, `<header>`, `<footer>`
 
@@ -256,6 +258,7 @@ For mutating requests, configure CSRF tokens globally:
 Use this checklist when reviewing No.JS templates:
 
 ### Directives & Syntax
+
 - [ ] All event bindings use colon syntax (`on:click`, not `on-click`)
 - [ ] `foreach`/`each`/`for` values contain the `in` keyword (`"item in items"`)
 - [ ] `model` is only used on `<input>`, `<select>`, or `<textarea>`
@@ -267,25 +270,30 @@ Use this checklist when reviewing No.JS templates:
 - [ ] Key modifiers are only used on keyboard events (`on:keydown`, `on:keyup`, `on:keypress`)
 
 ### Security
+
 - [ ] Every `bind-html` usage has its content source reviewed for XSS safety
 - [ ] No prototype-access patterns in expressions (`__proto__`, `constructor`)
 - [ ] CSRF is configured for apps that make mutating requests
 
 ### State & Data
+
 - [ ] Local UI state uses `state`; shared cross-route data uses `store`
 - [ ] Stores that are read before being defined are pre-initialized via `NoJS.config({ stores })`
 - [ ] `$store.name` is used in expressions to access global stores
 
 ### Loops
+
 - [ ] `key` attribute is present on loop elements for efficient DOM diffing
 - [ ] Loop variable names do not shadow parent scope variables unintentionally
 
 ### Routing
+
 - [ ] `route-view` is present in the layout to render route content
 - [ ] Protected routes use `guard` and `redirect` attributes
 - [ ] Router does not use deprecated `mode` attribute (use `useHash` config instead)
 
 ### Templates
+
 - [ ] `<template>` elements have unique `id` attributes
 - [ ] Error/success/loading templates use `var` to receive data when needed
 - [ ] Remote templates (`src`) paths are correct and accessible
@@ -301,6 +309,7 @@ Use this checklist when reviewing No.JS templates:
 - [ ] Use `validate-on="blur"` for progressive validation (errors appear after user interaction)
 
 ### Performance
+
 - [ ] Frequently toggled content uses `show`/`hide` instead of `if`
 - [ ] Static GET data uses `cached` to avoid redundant fetches
 - [ ] User-input-driven URLs use `debounce` to limit request frequency

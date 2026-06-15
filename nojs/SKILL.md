@@ -106,6 +106,7 @@ Directives are organized into eight categories. Each summary below provides enou
 ### 3. Use the expression syntax correctly
 
 Expressions support JavaScript-like syntax against the reactive context:
+
 - Property access: `user.name`, `items[0]`, `user?.address?.city`
 - Arithmetic, comparisons, ternary, template literals
 - Pipes (filters): `name | uppercase`, `price | currency:'USD'`
@@ -260,10 +261,10 @@ Check for: directive typos (`bnd` -> `bind`, `on-click` -> `on:click`), missing 
 
 ## Ecosystem
 
-- **Website**: https://no-js.dev/
-- **CDN**: https://cdn.no-js.dev/
+- **Website**: <https://no-js.dev/>
+- **CDN**: <https://cdn.no-js.dev/>
 - **npm**: `npm install @erickxavier/no-js`
-- **GitHub**: https://github.com/ErickXavier/no-js
+- **GitHub**: <https://github.com/ErickXavier/no-js>
 - **Elements**: `npm install @erickxavier/nojs-elements` (UI plugin — `drag`, `drop`, `drag-list`, `drag-multiple`, `validate`; new in v1.13.0)
 - **VS Code Extension**: NoJS LSP (completions, diagnostics, hover docs for 43+ directives)
-- **Full docs**: https://no-js.dev/llms-full.txt
+- **Full docs**: <https://no-js.dev/llms-full.txt>

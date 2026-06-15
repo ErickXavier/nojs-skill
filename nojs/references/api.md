@@ -195,6 +195,7 @@ NoJS.init(document.getElementById('app'));
 **`NoJS._initialized`** (getter/setter): Returns `true` after `init()` has been called. Setting it to `false` resets initialization state, allowing `init()` to be called again (used primarily in tests).
 
 **Initialization sequence**:
+
 1. Load external locale files (blocking, if `i18n.loadPath` is set)
 2. Process inline template includes (`<template include>`)
 3. Load remote templates (Phase 1: priority + default route)
@@ -299,7 +300,7 @@ Register a custom filter for use in pipe expressions.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `name` | string | The filter name used after `|` in expressions |
+| `name` | string | The filter name used after `\|` in expressions |
 | `fn` | function | Transform function. First argument is the piped value; additional arguments follow |
 
 ```javascript
@@ -384,6 +385,7 @@ Configure internationalization. Can be called before or after `NoJS.config()`. O
 | `cache` | boolean | `true` | Cache loaded locale files |
 
 **Locale resolution priority** (highest to lowest):
+
 1. Persisted value from `localStorage` (when `persist: true`)
 2. Browser language (when `detectBrowser: true`)
 3. `defaultLocale`
@@ -590,6 +592,7 @@ await NoJS.dispose();
 ```
 
 **Behavior**:
+
 1. Calls `dispose()` on each installed plugin in reverse order (with a 3-second timeout per plugin)
 2. Clears all plugins, globals, interceptors, stores, and event listeners
 3. Destroys the router instance
