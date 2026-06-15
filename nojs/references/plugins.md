@@ -93,6 +93,7 @@ NoJS.use(myLogger, { prefix: 'API' });
 ```
 
 **Constraints:**
+
 - Anonymous functions are rejected -- the plugin must have a name
 - Arrow functions are rejected -- they have no `.name` property in the required form
 - The function name must not be `"anonymous"`
@@ -156,7 +157,7 @@ Full TypeScript definitions available in the framework at `types/nojs-plugin.d.t
 
 ## Lifecycle
 
-```
+```text
 NoJS.use(plugin)     ->  plugin.install(app, options)   [synchronous]
 NoJS.init()          ->  ... DOM processed ...  ->  plugin.init(app)   [async allowed]
 NoJS.dispose()       ->  plugin.dispose(app)  ->  ... teardown ...     [async allowed, 3s timeout]
@@ -247,7 +248,7 @@ Primitive values (strings, numbers, booleans) are stored as-is and trigger a ful
 
 When called inside a plugin's `install()`, the global is tracked as owned by that plugin. If a different plugin overwrites that global, a warning is logged:
 
-```
+```text
 [No.JS] Global "$theme" owned by "ui-kit" is being overwritten.
 ```
 
@@ -378,7 +379,7 @@ Returns a `Promise` that resolves when teardown is complete.
 2. Each plugin's `dispose` function has a **3-second timeout**. If it exceeds the timeout, an error is logged and disposal continues
 3. After all plugins are disposed: globals cleared, interceptors cleared, init state reset
 
-```
+```text
 NoJS.dispose()
   -> pluginC.dispose()   (last installed)
   -> pluginB.dispose()
@@ -435,6 +436,7 @@ The freezing is implemented via `_freezeDirectives()` which runs after all built
 ### Prototype Pollution Protection
 
 `NoJS.global()` blocks:
+
 - Names: `__proto__`, `constructor`, `prototype` are forbidden
 - Values: objects are JSON-round-tripped to strip `__proto__` keys before being wrapped in a reactive context
 - Non-serializable objects are deep-checked for dangerous function references
@@ -442,6 +444,7 @@ The freezing is implemented via `_freezeDirectives()` which runs after all built
 ### Dangerous Function Blocking
 
 `eval` and `Function` references are blocked at all levels:
+
 - Direct assignment: `NoJS.global('run', eval)` -- rejected
 - Nested in objects: `NoJS.global('tools', { exec: Function })` -- rejected
 - Deep nesting: `NoJS.global('nested', { a: { b: { fn: eval } } })` -- rejected

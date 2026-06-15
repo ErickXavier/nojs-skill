@@ -13,7 +13,7 @@ Runtime inspection, mutation, and monitoring API for No.JS applications. DevTool
   - [inspectTree(selector?)](#inspecttreeselector)
   - [stats()](#stats)
   - [mutate(id, key, value)](#mutateid-key-value)
-  - [mutateStore(name, key, value)](#mutateStorename-key-value)
+  - [mutateStore(name, key, value)](#mutatestorename-key-value)
   - [highlight(selector) / unhighlight()](#highlightselector--unhighlight)
   - [on(type, fn)](#ontype-fn)
 - [CustomEvent Protocol](#customevent-protocol)
@@ -37,6 +37,7 @@ NoJS.init();
 ```
 
 When enabled, the framework:
+
 1. Assigns a unique `__devtoolsId` to every reactive context created by `createContext()`
 2. Registers each context in an internal `_ctxRegistry` Map for inspection
 3. Emits `CustomEvent` lifecycle events on the `window` object
@@ -45,7 +46,7 @@ When enabled, the framework:
 
 A confirmation message appears in the console when DevTools is successfully initialized:
 
-```
+```text
 [No.JS DevTools] enabled — access via window.__NOJS_DEVTOOLS__
 ```
 
@@ -66,7 +67,7 @@ DevTools is silently disabled on non-local hostnames to prevent accidental expos
 
 If `devtools: true` is set but the hostname is not local, the following warning is emitted and DevTools does not initialize:
 
-```
+```text
 [No.JS] devtools: true is ignored outside local environments. Remove devtools: true before deploying to production.
 ```
 
@@ -229,6 +230,7 @@ window.__NOJS_DEVTOOLS__.unhighlight();
 ```
 
 The overlay is a fixed-position `div` with:
+
 - Background: `rgba(66, 133, 244, 0.25)`
 - Border: `2px solid rgba(66, 133, 244, 0.8)`
 - z-index: `2147483647` (maximum)
@@ -343,6 +345,7 @@ The `_devtoolsEmit()` function is a no-op when `_config.devtools` is `false`, so
 When DevTools is enabled, every reactive context created by `createContext()` is assigned a monotonically increasing `__devtoolsId` and registered in an internal `Map` (`_ctxRegistry`). This registry maps `id -> Proxy` and is used by the `inspect` and `mutate` commands.
 
 The registry enables:
+
 - Looking up any context by numeric ID (from `inspect:element` results)
 - Mutating context values from the console without needing a DOM reference
 - Building the directive tree via `inspectTree()`

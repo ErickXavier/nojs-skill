@@ -125,6 +125,7 @@ When used on a `route-view` outlet, `transition` uses the **View Transition API*
 ```
 
 **How it works:**
+
 1. No.JS sets `view-transition-name: route-content` on the outlet element
 2. The DOM swap is wrapped in `document.startViewTransition({ update, types })`
 3. Direction types (`forward` or `backward`) are passed via `types` for the `slide` preset
@@ -359,6 +360,7 @@ Enable lasso/multi-select on children.
 | `drag-group` | string | required | Group name -- all selected items move together |
 
 Interactions:
+
 - Click selects a single item (replaces previous selection)
 - Ctrl/Cmd+Click adds to selection
 - Escape clears the selection

@@ -71,6 +71,7 @@ Modifiers can be combined: `on:submit.prevent.once="register()"`, `on:keydown.ct
 ### `$event` and `$el`
 
 Inside any `on:*` handler:
+
 - `$event` -- the native DOM event object
 - `$el` -- the current element
 

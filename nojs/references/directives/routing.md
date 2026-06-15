@@ -116,7 +116,8 @@ Point `route-view` at a folder and No.JS resolves routes to template files autom
 ```
 
 Given this folder structure:
-```
+
+```text
 pages/
   overview.tpl    -> /
   analytics.tpl   -> /analytics
@@ -353,7 +354,7 @@ Set `<head>` metadata declaratively on each `<template route>`. Updated on every
 
 | Attribute | Description |
 |-----------|-------------|
-| `page-title` | Sets `document.title`. Value is a No.JS expression (single-quoted strings: `'About | Site'`) |
+| `page-title` | Sets `document.title`. Value is a No.JS expression (single-quoted strings: `'About \| Site'`) |
 | `page-description` | Creates/updates `<meta name="description">` |
 | `page-canonical` | Creates/updates `<link rel="canonical">` |
 | `page-jsonld` | Creates/updates `<script type="application/ld+json" data-nojs>`. Value is a JSON string with `{placeholder}` interpolation |
@@ -430,7 +431,7 @@ location / { try_files $uri $uri/ /index.html; }
 RewriteRule ^ index.html [L]
 ```
 
-```
+```text
 # Netlify _redirects
 /*  /index.html  200
 ```
@@ -487,6 +488,7 @@ The `slide` preset automatically detects navigation direction:
 - **Backward** -- triggered by `$router.back()`, browser back button, or `popstate` events going backward in history
 
 Direction types are passed to `document.startViewTransition({ types })`:
+
 - Forward navigation: `types: ['slide', 'forward']`
 - Backward navigation: `types: ['slide', 'backward']`
 

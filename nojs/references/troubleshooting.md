@@ -16,7 +16,7 @@ Common issues, their causes, and fixes when developing with the No.JS framework.
   - [Route Guard Failed Without Redirect](#route-guard-failed-without-redirect)
   - [Hash Mode SEO Warning](#hash-mode-seo-warning)
   - [Deprecated CSP Config](#deprecated-csp-config)
-  - [Deprecated sanitize:false](#deprecated-sanitizefalse)
+  - [Deprecated `sanitize:false`](#deprecated-sanitizefalse)
   - [HTML Sanitization Disabled](#html-sanitization-disabled)
   - [Deprecated Loop Syntax](#deprecated-loop-syntax)
   - [Orphan else Element](#orphan-else-element)
@@ -88,7 +88,8 @@ All No.JS warnings are prefixed with `[No.JS]` in the browser console. These are
 ### Expression Error
 
 **Console message:**
-```
+
+```text
 [No.JS] Expression error: <expr> <error message>
 ```
 
@@ -109,7 +110,8 @@ All No.JS warnings are prefixed with `[No.JS]` in the browser console. These are
 ### Unknown Filter
 
 **Console message:**
-```
+
+```text
 [No.JS] Unknown filter: <name>
 ```
 
@@ -129,11 +131,14 @@ All No.JS warnings are prefixed with `[No.JS]` in the browser console. These are
 ### Failed to Load Template
 
 **Console message:**
-```
+
+```text
 [No.JS] Failed to load template: <src> HTTP <status>
 ```
+
 or
-```
+
+```text
 [No.JS] Failed to load template: <src> <error message>
 ```
 
@@ -144,7 +149,8 @@ or
 ### Insecure Template URL
 
 **Console message:**
-```
+
+```text
 [No.JS] Template "<src>" is loaded over insecure HTTP from an HTTPS page. Use HTTPS to prevent tampering.
 ```
 
@@ -155,7 +161,8 @@ or
 ### Persist Without persist-key
 
 **Console message:**
-```
+
+```text
 [No.JS] persist="<value>" requires a persist-key attribute. State will not be persisted.
 ```
 
@@ -174,7 +181,8 @@ or
 ### Persist Schema Warnings
 
 **Console messages:**
-```
+
+```text
 [No.JS] persist-schema: ignoring unknown key "<key>"
 [No.JS] persist-schema: type mismatch for "<key>" (expected <type>, got <type>)
 ```
@@ -186,7 +194,8 @@ or
 ### Sensitive State Keys
 
 **Console message:**
-```
+
+```text
 [No.JS] State key(s) "token", "password" may contain sensitive data. Consider using persist-fields to exclude them.
 ```
 
@@ -205,7 +214,8 @@ or
 ### Sensitive Headers Inline
 
 **Console message:**
-```
+
+```text
 [No.JS] Sensitive header "<key>" is set inline on a headers attribute. Use NoJS.config({ headers }) or an interceptor to avoid exposing credentials in HTML source.
 ```
 
@@ -222,7 +232,8 @@ or
 ### Route Guard Failed Without Redirect
 
 **Console message:**
-```
+
+```text
 [No.JS] Route guard failed for "<path>" but no redirect is defined. The route will not render.
 ```
 
@@ -239,7 +250,8 @@ or
 ### Hash Mode SEO Warning
 
 **Console message:**
-```
+
+```text
 [No.JS] Router is running in hash mode (useHash: true). URLs like /#/about are not indexed as separate pages by search engines. Use useHash: false with a server-side SPA fallback (try_files) for SEO-friendly routing.
 ```
 
@@ -254,7 +266,8 @@ NoJS.config({ router: { useHash: true, suppressHashWarning: true } });
 ### Deprecated CSP Config
 
 **Console message:**
-```
+
+```text
 [No.JS] csp config option removed — No.JS is now CSP-safe by default
 ```
 
@@ -262,10 +275,11 @@ NoJS.config({ router: { useHash: true, suppressHashWarning: true } });
 
 **Fix:** Remove the `csp` option from your config.
 
-### Deprecated sanitize:false
+### Deprecated `sanitize:false`
 
 **Console message:**
-```
+
+```text
 [No.JS] sanitize:false is deprecated — use dangerouslyDisableSanitize:true to make the risk explicit.
 ```
 
@@ -280,7 +294,8 @@ NoJS.config({ dangerouslyDisableSanitize: true });
 ### HTML Sanitization Disabled
 
 **Console message:**
-```
+
+```text
 [No.JS] HTML sanitization is DISABLED. This exposes your app to XSS attacks. Only disable for trusted content.
 ```
 
@@ -295,7 +310,8 @@ NoJS.config({ sanitizeHtml: html => DOMPurify.sanitize(html) });
 ### Deprecated Loop Syntax
 
 **Console message:**
-```
+
+```text
 [No.JS] "<directive>" with "from" is deprecated. Use <directive>="<item> in <list>" instead.
 ```
 
@@ -316,7 +332,8 @@ NoJS.config({ sanitizeHtml: html => DOMPurify.sanitize(html) });
 ### Orphan else Element
 
 **Console message:**
-```
+
+```text
 [No.JS] else: no preceding if/else-if sibling found — note the sibling else pattern for loops was removed in v1.15; use else="templateId" on the loop element
 ```
 
@@ -343,7 +360,8 @@ For conditionals, ensure the `else` element directly follows its `if`/`else-if` 
 ### Security Warning for bind-html
 
 **Console message:**
-```
+
+```text
 [No.JS] [Security] bind-html used with dynamic expression: "<expr>". Ensure the value is trusted or sanitized — use bind for plain text.
 ```
 
@@ -354,7 +372,8 @@ For conditionals, ensure the `else` element directly follows its `if`/`else-if` 
 ### Cannot Override Core Directive
 
 **Console message:**
-```
+
+```text
 [No.JS] Cannot override core directive "<name>".
 ```
 
@@ -373,7 +392,8 @@ NoJS.directive('my-bind', { ... });
 ### MaxListenersExceeded
 
 **Console message:**
-```
+
+```text
 [No.JS] MaxListenersExceeded: event "<name>" has <count> listeners (max <limit>). Possible memory leak.
 ```
 
@@ -388,7 +408,8 @@ NoJS.config({ maxEventListeners: 200 });
 ### Plugin Warnings
 
 **Console messages:**
-```
+
+```text
 [No.JS] Plugin must have a unique, non-empty name. Use { name: "my-plugin", install: fn }.
 [No.JS] Plugin "<name>" name collision: a different plugin with this name is already installed.
 [No.JS] Cannot install plugins during dispose.
@@ -401,7 +422,8 @@ NoJS.config({ maxEventListeners: 200 });
 ### drag-multiple Without drag-group
 
 **Console message:**
-```
+
+```text
 [No.JS] drag-multiple requires drag-group attribute
 ```
 
@@ -416,7 +438,8 @@ NoJS.config({ maxEventListeners: 200 });
 ### Infinite Loop in Nested Outlets
 
 **Console message:**
-```
+
+```text
 [No.JS] [ROUTER] Infinite loop detected for nested outlet: <key>
 ```
 
@@ -427,7 +450,8 @@ NoJS.config({ maxEventListeners: 200 });
 ### i18n Load Failures
 
 **Console messages:**
-```
+
+```text
 [No.JS] i18n: failed to load <url> (<status>)
 [No.JS] i18n: error loading <url> <error>
 ```
@@ -439,7 +463,8 @@ NoJS.config({ maxEventListeners: 200 });
 ### Class-Based Route Transitions Deprecated
 
 **Console message:**
-```
+
+```text
 [No.JS] Class-based route transitions are deprecated. The View Transition API is now used by default. Set router.viewTransition to false to keep legacy behavior.
 ```
 
@@ -634,7 +659,7 @@ The previous `csp` config option has been removed. If you see the warning `csp c
 
 **Fix:** Add your template server to the CSP `connect-src` policy:
 
-```
+```text
 Content-Security-Policy: connect-src 'self' https://templates.example.com;
 ```
 
@@ -703,7 +728,8 @@ The cleaned SVG is then re-encoded back into the same format (base64 or URL-enco
 **Problem:** Navigation to a guarded route results in an empty outlet with a console warning.
 
 **Cause:** The guard expression evaluated to `false` but no `redirect` attribute exists. The router clears the outlet and warns:
-```
+
+```text
 Route guard failed for "<path>" but no redirect is defined. The route will not render.
 ```
 
@@ -1123,6 +1149,7 @@ NoJS.i18n({
 **Problem:** Templates loaded with `lazy="ondemand"` are not available when needed.
 
 **Cause:** No.JS loads templates in phases:
+
 1. **Phase 0:** Templates with `lazy="priority"` load first
 2. **Phase 1:** Non-route templates and the route matching the current URL load next (blocking)
 3. **Phase 2:** Remaining route templates load in the background (non-blocking)
@@ -1150,11 +1177,13 @@ The cache is controlled by `_config.templates.cache` (default: `true`). It persi
 **Fix:**
 
 1. **During development**, disable template caching:
+
    ```js
    NoJS.config({ templates: { cache: false } });
    ```
 
 2. **In production**, use cache-busting query strings or versioned filenames:
+
    ```html
    <template src="components/header.tpl?v=2"></template>
    ```
