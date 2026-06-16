@@ -1,4 +1,4 @@
-# Data Fetching Directives
+# HTTP Directives
 
 Declarative HTTP requests via HTML attributes. Priority 1.
 
@@ -27,6 +27,19 @@ Declarative HTTP requests via HTML attributes. Priority 1.
   - [Trigger Behavior](#trigger-behavior) -- how each directive triggers its request
   - [Pagination & Fetch Triggers](#pagination--fetch-triggers) -- get-trigger, get-insert, get-page, get-cursor, get-threshold
   - [SwitchMap / Abort Behavior](#switchmap--abort-behavior) -- rapid calls abort in-flight requests
+
+---
+
+## Syntax Reference
+
+| Directive | Syntax | Description |
+|-----------|--------|-------------|
+| `base` | `base="https://api.example.com"` | Set API base URL for descendant HTTP directives |
+| `get` | `get="/endpoint"` | Fetch data via HTTP GET (fires on mount) |
+| `post` | `post="/endpoint"` | Submit data via HTTP POST (fires on submit/click) |
+| `put` | `put="/endpoint"` | Update data via HTTP PUT (fires on submit/click) |
+| `patch` | `patch="/endpoint"` | Partial update via HTTP PATCH (fires on submit/click) |
+| `delete` | `delete="/endpoint"` | Delete data via HTTP DELETE (fires on submit/click) |
 
 ---
 
