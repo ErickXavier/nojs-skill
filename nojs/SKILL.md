@@ -7,6 +7,43 @@ description: Provides expert-level knowledge of the No.JS HTML-first reactive fr
 
 # No.JS Quick Reference
 
+## Commands
+
+When the user invokes `/nojs <command>`, execute the matching command below. If no command is given, activate the skill normally as a knowledge source.
+
+### `cdn`
+
+Output the CDN `<script>` tag(s) the user needs. Determine which library from context or ask if ambiguous.
+
+| Argument | Output |
+|----------|--------|
+| `core` (default) | `<script src="https://cdn.no-js.dev/"></script>` |
+| `elements` | `<script src="https://cdn.no-js.dev/"></script>` and `<script src="https://cdn-elements.no-js.dev/"></script>` |
+| `both` | Same as `elements` — both tags, core first |
+
+Elements always requires Core. When outputting `elements` or `both`, always include the Core tag before the Elements tag.
+
+### `scaffold`
+
+Generate a starter HTML file. Read the matching template from the `templates/` directory relative to this skill, adapt it to the user's context (project name, API endpoints, state shape), and write it to the user's project.
+
+| Argument | Template | Description |
+|----------|----------|-------------|
+| `core` (default) | `templates/scaffold-core.html` | Starter app: state, binding, events, data fetching |
+| `elements` | `templates/scaffold-elements.html` | Starter app with Elements: tabs, accordion, modal, toast |
+| `spa` | `templates/scaffold-spa.html` | Multi-page SPA with routing, dynamic routes, 404 fallback |
+| `form` | `templates/scaffold-form.html` | Validated contact form with error display |
+
+After generating, tell the user how to run it: open the file in a browser (no build step needed).
+
+### `component`
+
+Generate a self-contained HTML snippet for a NoJS Elements component. The user specifies which component by name.
+
+Available components: `accordion`, `breadcrumb`, `dnd`, `dropdown`, `modal`, `popover`, `scroll-spy`, `skeleton`, `split`, `stepper`, `table`, `tabs`, `toast`, `tooltip`, `tree`, `validate`, `virtual-list`.
+
+Read the matching reference file from `references/elements/<name>.md` to get the correct directive syntax, then generate a minimal working snippet. Always include both CDN tags (Core + Elements).
+
 ## 1. Framework Overview
 
 No.JS is an HTML-first reactive framework. You build dynamic web applications using only HTML attributes -- no JavaScript files, no build step, no virtual DOM. Include one `<script>` tag, write directives on plain HTML elements, and the framework handles reactivity, data fetching, routing, and state management.
@@ -580,6 +617,15 @@ All paths relative to `nojs/references/`:
 | [troubleshooting.md](references/troubleshooting.md) | Common errors, debugging tips |
 | [validation.md](references/validation.md) | Template validation rules, common mistakes |
 
+### Templates (for `/nojs scaffold`)
+
+| Path | Content |
+|------|---------|
+| [templates/scaffold-core.html](templates/scaffold-core.html) | Starter app: state, binding, events, data fetching |
+| [templates/scaffold-elements.html](templates/scaffold-elements.html) | Elements app: tabs, accordion, modal, toast |
+| [templates/scaffold-spa.html](templates/scaffold-spa.html) | SPA: routing, dynamic routes, 404 fallback |
+| [templates/scaffold-form.html](templates/scaffold-form.html) | Validated form: error display, character counter |
+
 ## 10. Version and Metadata
 
 | Property | Value |
@@ -587,7 +633,7 @@ All paths relative to `nojs/references/`:
 | **Version** | 1.14.1 |
 | **Website** | <https://no-js.dev/> |
 | **CDN (core)** | `https://cdn.no-js.dev/` |
-| **CDN (elements)** | `https://cdn.no-js.dev/elements` |
+| **CDN (elements)** | `https://cdn-elements.no-js.dev/` |
 | **npm (core)** | `@erickxavier/no-js` |
 | **npm (elements)** | `@erickxavier/nojs-elements` |
 | **GitHub** | [no-js](https://github.com/ErickXavier/no-js), [nojs-elements](https://github.com/ErickXavier/nojs-elements) |

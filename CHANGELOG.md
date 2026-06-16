@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Skill commands** — `/nojs cdn`, `/nojs scaffold`, `/nojs component` for interactive code generation
+- `templates/scaffold-core.html` — Starter app with state, binding, events, data fetching
+- `templates/scaffold-elements.html` — Starter app with Elements: tabs, accordion, modal, toast
+- `templates/scaffold-spa.html` — Multi-page SPA with routing, dynamic routes, 404 fallback
+- `templates/scaffold-form.html` — Validated contact form with error display and character counter
 - `references/directives/` — 12 granular directive files (binding, state, conditionals, loops, events, http, routing, templates, styling, i18n, animations, head-seo) replacing 8 mixed-concern files
 - `references/elements/` — 17 new element reference files covering all NoJS-Elements components (accordion, breadcrumb, dnd, dropdown, modal, popover, scroll-spy, skeleton, split, stepper, table, tabs, toast, tooltip, tree, validate, virtual-list)
 - `references/core/` — 6 new framework internals files (api, expressions, filters, config, security, plugins)
@@ -19,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Elements CDN URL updated to `https://cdn-elements.no-js.dev/`
 - **BREAKING (Core v1.15 sync):** removed all sibling-`else` loop teaching from SKILL.md and control-flow.md; loops document only the `else="templateId"` companion attribute
 - Documented new `else` semantics: the else template renders when the list is empty (`[]`) or null/undefined/non-array
 - Added orphan-`else` console warning entry to the troubleshooting reference
