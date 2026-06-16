@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My NoJS Elements App</title>
+    <script src="https://cdn.no-js.dev/"></script>
+    <script src="https://cdn-elements.no-js.dev/"></script>
+</head>
+<body state="{ activeTab: 'home' }">
+
+    <main style="max-width: 800px; margin: 2rem auto; font-family: system-ui, sans-serif;">
+
+        <h1>My NoJS Elements App</h1>
+
+        <!-- Tabs -->
+        <div tabs bind-active="activeTab">
+            <div role="tablist">
+                <button tab="home">Home</button>
+                <button tab="features">Features</button>
+                <button tab="about">About</button>
+            </div>
+            <div tab-panel="home">
+                <h2>Welcome</h2>
+                <p>This starter uses NoJS Core + Elements for rich UI components.</p>
+            </div>
+            <div tab-panel="features">
+                <h2>Features</h2>
+                <!-- Accordion -->
+                <div accordion>
+                    <details accordion-item>
+                        <summary>Reactive State</summary>
+                        <p>Proxy-backed objects that update the DOM automatically.</p>
+                    </details>
+                    <details accordion-item>
+                        <summary>UI Elements</summary>
+                        <p>Pre-built components: tabs, accordion, modal, toast, tooltip, and more.</p>
+                    </details>
+                    <details accordion-item>
+                        <summary>Zero Dependencies</summary>
+                        <p>No build step, no bundler. Just HTML.</p>
+                    </details>
+                </div>
+            </div>
+            <div tab-panel="about">
+                <h2>About</h2>
+                <p>Built with <a href="https://no-js.dev">No.JS</a>.</p>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <button on:click="document.querySelector('[modal]').showModal()">Open Modal</button>
+        <dialog modal>
+            <h2>Hello from NoJS Elements</h2>
+            <p>This modal uses the Elements <code>modal</code> directive.</p>
+            <button on:click="document.querySelector('[modal]').close()">Close</button>
+        </dialog>
+
+        <!-- Toast -->
+        <div toast-container position="top-right"></div>
+        <button on:click="$toast({ message: 'Hello!', type: 'success', duration: 3000 })">
+            Show Toast
+        </button>
+
+    </main>
+
+</body>
+</html>

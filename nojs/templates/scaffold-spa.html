@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My NoJS SPA</title>
+    <script src="https://cdn.no-js.dev/"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; }
+        nav { background: #1a1a2e; padding: 1rem 2rem; display: flex; gap: 1.5rem; }
+        nav a { color: #e0e0e0; text-decoration: none; }
+        nav a:hover, nav a.active { color: #fff; text-decoration: underline; }
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    </style>
+</head>
+<body store="app" state="{ user: null }">
+
+    <nav>
+        <a route="/">Home</a>
+        <a route="/about">About</a>
+        <a route="/users">Users</a>
+        <a route="/contact">Contact</a>
+    </nav>
+
+    <main route-view>
+
+        <!-- Home -->
+        <section route="/">
+            <h1>Home</h1>
+            <p>Welcome to this NoJS single-page application.</p>
+        </section>
+
+        <!-- About -->
+        <section route="/about">
+            <h1>About</h1>
+            <p>Built entirely in HTML with No.JS directives. No JavaScript files needed.</p>
+        </section>
+
+        <!-- Users — fetched from API -->
+        <section route="/users" base="https://jsonplaceholder.typicode.com" get="/users" as="users">
+            <h1>Users</h1>
+            <ul>
+                <li each="user in users">
+                    <a route="/users/{{ user.id }}"><strong bind="user.name"></strong></a>
+                    — <span bind="user.email | lowercase"></span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- User detail — dynamic route -->
+        <section route="/users/:id" get="/users/{{ $route.params.id }}" as="profile"
+                 base="https://jsonplaceholder.typicode.com">
+            <h1 bind="profile.name"></h1>
+            <p>Email: <span bind="profile.email"></span></p>
+            <p>Phone: <span bind="profile.phone"></span></p>
+            <a route="/users">← Back to users</a>
+        </section>
+
+        <!-- Contact form -->
+        <section route="/contact">
+            <h1>Contact</h1>
+            <form state="{ name: '', email: '', message: '', sent: false }"
+                  on:submit.prevent="sent = true">
+                <div style="display: grid; gap: 1rem; max-width: 400px;">
+                    <input type="text" model="name" placeholder="Name" required>
+                    <input type="email" model="email" placeholder="Email" required>
+                    <textarea model="message" placeholder="Message" rows="4" required></textarea>
+                    <button type="submit">Send</button>
+                </div>
+                <p show="sent" style="color: green; margin-top: 1rem;">Message sent!</p>
+            </form>
+        </section>
+
+        <!-- 404 fallback -->
+        <section route="*">
+            <h1>404</h1>
+            <p>Page not found. <a route="/">Go home</a></p>
+        </section>
+
+    </main>
+
+</body>
+</html>

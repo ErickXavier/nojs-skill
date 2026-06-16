@@ -65,6 +65,14 @@ Copy `nojs/SKILL.md` and the `nojs/references/` directory into your skills direc
 | `nojs/references/troubleshooting.md` | Common issues, console warnings, debugging guide |
 | `nojs/references/devtools.md` | DevTools API, event protocol, inspector |
 
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `/nojs cdn` | Output CDN `<script>` tags (core, elements, or both) |
+| `/nojs scaffold` | Generate a starter HTML app (core, elements, spa, form) |
+| `/nojs component <name>` | Generate a NoJS Elements component snippet |
+
 ## Activation
 
 The skill activates when it detects:

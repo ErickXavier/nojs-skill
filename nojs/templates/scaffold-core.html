@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My NoJS App</title>
+    <script src="https://cdn.no-js.dev/"></script>
+</head>
+<body state="{ count: 0, items: [], newItem: '' }">
+
+    <header>
+        <h1>My NoJS App</h1>
+    </header>
+
+    <main style="max-width: 640px; margin: 2rem auto; font-family: system-ui, sans-serif;">
+
+        <!-- Reactive counter -->
+        <section>
+            <h2>Counter</h2>
+            <button on:click="count++">Clicked <span bind="count"></span> times</button>
+            <button on:click="count = 0">Reset</button>
+        </section>
+
+        <!-- List with add/remove -->
+        <section>
+            <h2>Items</h2>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <input type="text" model="newItem" placeholder="Add an item..."
+                       on:keydown.enter="items = [...items, { text: newItem }]; newItem = ''">
+                <button on:click="items = [...items, { text: newItem }]; newItem = ''">Add</button>
+            </div>
+            <ul>
+                <li foreach="item in items">
+                    <span bind="item.text"></span>
+                    <button on:click="items = items.filter(i => i !== item)">Remove</button>
+                </li>
+            </ul>
+            <p show="items.length === 0" style="color: #666;">No items yet.</p>
+        </section>
+
+        <!-- Data fetching -->
+        <section>
+            <h2>Users from API</h2>
+            <ul base="https://jsonplaceholder.typicode.com" get="/users" as="users">
+                <li each="user in users">
+                    <strong bind="user.name"></strong> — <span bind="user.email | lowercase"></span>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+
+</body>
+</html>
