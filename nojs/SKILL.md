@@ -407,7 +407,7 @@ Custom filters: `NoJS.filter('myFilter', (value, ...args) => result)`.
 
 NoJS Elements is a UI plugin library with 17 declarative, accessible components. Requires No.JS >= 1.13.0.
 
-**CDN** (auto-installs): `<script src="https://cdn.no-js.dev/elements"></script>` (after core script).
+**CDN** (auto-installs): `<script src="https://cdn-elements.no-js.dev/"></script>` (after core script).
 
 ### All 17 Elements
 
@@ -656,8 +656,6 @@ All paths relative to `nojs/references/`:
 | **Website** | <https://no-js.dev/> |
 | **CDN (core)** | `https://cdn.no-js.dev/` |
 | **CDN (elements)** | `https://cdn-elements.no-js.dev/` |
-| **npm (core)** | `@no-js-dev/nojs` |
-| **npm (elements)** | `@no-js-dev/nojs-elements` |
 | **GitHub** | [no-js](https://github.com/no-js-dev/nojs), [nojs-elements](https://github.com/no-js-dev/nojs-elements) |
 | **VS Code** | NoJS LSP (completions, diagnostics, hover docs for 45+ directives) |
 | **Full docs** | <https://no-js.dev/llms-full.txt> |
