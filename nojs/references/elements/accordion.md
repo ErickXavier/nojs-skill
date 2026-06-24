@@ -25,17 +25,7 @@ Collapsible content sections built on native `<details>` / `<summary>` elements.
 
 ```html
 <!-- CDN (auto-installs, no registration needed) -->
-<script src="https://unpkg.com/@nickeljs/elements"></script>
-
-<!-- ESM (register the full plugin or just the accordion) -->
-<script type="module">
-  import NoJSElements from '@nickeljs/elements';
-  NoJS.use(NoJSElements);
-
-  // Or register only the accordion element
-  import { accordion } from '@nickeljs/elements';
-  NoJS.use(accordion);
-</script>
+<script src="https://cdn-elements.no-js.dev/nojs-elements.iife.js"></script>
 ```
 
 Requires No.JS >= 1.13.0.
