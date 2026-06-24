@@ -180,7 +180,7 @@ Only one section open at a time. Opening a new section closes the currently open
   </details>
   <details>
     <summary>How do I install it?</summary>
-    <p>Include the CDN script tag or install via npm.</p>
+    <p>Include the CDN script tag. See the <a href="https://elements.no-js.dev">documentation</a>.</p>
   </details>
   <details>
     <summary>Is it accessible?</summary>
